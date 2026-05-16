@@ -64,6 +64,21 @@ async def mobile_index():
     return FileResponse(MOBILE_STATIC / "index.html")
 
 
+@app.get("/mind")
+async def mind_exhibit():
+    return FileResponse(STATIC / "mind-exhibit.html")
+
+
+@app.get("/mind-exhibit.css")
+async def mind_exhibit_css():
+    return FileResponse(STATIC / "mind-exhibit.css")
+
+
+@app.get("/mind-exhibit.js")
+async def mind_exhibit_js():
+    return FileResponse(STATIC / "mind-exhibit.js")
+
+
 # ─── 核心组件 ────────────────────────────────────────────────────────────────
 
 companion_memory = CompanionMemory()

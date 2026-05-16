@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evans Thought Atlas</title>
+  <link rel="stylesheet" href="./mind-exhibit.css" />
+</head>
+<body>
+  <canvas id="neuralCanvas"></canvas>
+
+  <div class="atlas-shell mind-page">
+    <header class="atlas-header">
+      <div class="header-block">
+        <div class="header-kicker">EVANS / THOUGHT ATLAS</div>
+        <h1>可被看见的人工心智</h1>
+        <div class="header-subline">将 Evans 的多模态认知链路呈现为可展览的运行剖面。</div>
+      </div>
+      <div class="header-block header-meta">
+        <div class="meta-line">BLACKBOX / WIREFRAME / COGNITIVE EXHIBIT</div>
+        <div class="meta-line" id="backendOriginText">等待后端地址</div>
+      </div>
+    </header>
+
+    <main class="atlas-main">
+      <section class="atlas-stage">
+        <div class="stage-frame" id="mindViewport">
+          <div class="atmosphere-layer">
+            <span class="atmo-band atmo-band-1"></span>
+            <span class="atmo-band atmo-band-2"></span>
+            <span class="atmo-band atmo-band-3"></span>
+            <span class="atmo-grid"></span>
+          </div>
+          <div class="frame-border"></div>
+          <div class="frame-grid"></div>
+          <div class="frame-annotations stage-scaffold">
+            <span class="axis-note axis-top">ACTIVE MIND REGION</span>
+            <span class="axis-note axis-left">PERCEPTION / FUSION / COGNITION / DECISION / ORCHESTRATION / EXECUTION</span>
+            <span class="axis-note axis-right">LIVE COGNITIVE EXHIBIT</span>
+            <span class="axis-note axis-bottom">WRITEBACK / MEMORY SEDIMENT / PROACTIVE PREVIEW</span>
+          </div>
+
+          <div class="guide-columns">
+            <span class="guide-column guide-1"><i></i><em>SENSE</em></span>
+            <span class="guide-column guide-2"><i></i><em>FUSION</em></span>
+            <span class="guide-column guide-3"><i></i><em>INTENT</em></span>
+            <span class="guide-column guide-4"><i></i><em>DECISION</em></span>
+            <span class="guide-column guide-5"><i></i><em>EXECUTE</em></span>
+          </div>
+
+          <div class="stage-layer-index" aria-hidden="true">
+            <span>L1 / PERCEPTION</span>
+            <span>L2 / FUSION</span>
+            <span>L3 / COGNITION</span>
+            <span>L4 / DECISION</span>
+            <span>L5 / ORCHESTRATION</span>
+            <span>L6 / EXECUTION</span>
+          </div>
+
+          <div class="core-aura" aria-hidden="true">
+            <span class="core-ring core-ring-1"></span>
+            <span class="core-ring core-ring-2"></span>
+            <span class="core-ring core-ring-3"></span>
+            <span class="core-node core-node-a"></span>
+            <span class="core-node core-node-b"></span>
+            <span class="core-node core-node-c"></span>
+          </div>
+
+          <div class="survey-stack" id="layerCluster">
+            <button class="survey-layer layer-perception" data-layer="perception">
+              <span class="layer-side">L1 / PERCEPTION</span>
+              <span class="layer-title">感知入口</span>
+              <span class="layer-subtitle">CAMERA / TEXT / SENSOR</span>
+              <span class="layer-caption">INPUT AXIS ARRAY</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M36 314 C118 254 176 206 280 218 S458 314 546 294 S664 238 726 182" />
+                <path d="M54 142 C118 166 166 214 244 206 S384 132 480 156 S626 218 706 190" />
+                <path d="M84 90 C154 110 226 116 298 142 S456 206 598 222 S676 180 716 144" />
+                <path d="M102 242 C176 262 250 286 338 298 S510 286 638 258" />
+                <circle cx="54" cy="142" r="3" />
+                <circle cx="168" cy="214" r="3" />
+                <circle cx="298" cy="142" r="3" />
+                <circle cx="480" cy="156" r="3" />
+                <circle cx="706" cy="190" r="3" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="perception"></div>
+              </div>
+            </button>
+
+            <button class="survey-layer layer-fusion" data-layer="fusion">
+              <span class="layer-side">L2 / FUSION</span>
+              <span class="layer-title">场景汇流</span>
+              <span class="layer-subtitle">MULTI-MODAL BLEND</span>
+              <span class="layer-caption">CONVERGENCE / COMPRESSION</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M38 248 C134 180 204 150 296 180 S452 296 570 284 S670 188 728 162" />
+                <path d="M72 124 C158 164 248 224 334 218 S458 126 566 128 S660 176 714 212" />
+                <path d="M96 306 C184 280 274 242 356 252 S500 304 620 330" />
+                <path d="M118 84 C218 106 288 104 398 150 S568 240 700 246" />
+                <circle cx="38" cy="248" r="3" />
+                <circle cx="204" cy="150" r="3" />
+                <circle cx="398" cy="150" r="3" />
+                <circle cx="566" cy="128" r="3" />
+                <circle cx="700" cy="246" r="3" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="fusion"></div>
+              </div>
+            </button>
+
+            <button class="survey-layer layer-cognition" data-layer="cognition">
+              <span class="layer-side">L3 / COGNITION</span>
+              <span class="layer-title">认知推断</span>
+              <span class="layer-subtitle">BELIEF / DESIRE / INTENTION</span>
+              <span class="layer-caption">COGNITIVE CLUSTER / BUNDLED RELATIONS</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M46 314 C122 274 178 210 246 174 S336 132 382 160 S454 272 548 276 S662 210 726 128" />
+                <path d="M72 118 C164 136 246 168 328 218 S462 300 622 236" />
+                <path d="M110 210 C208 188 300 206 376 252 S504 340 692 314" />
+                <path d="M162 90 C250 112 330 132 410 170 S528 242 636 196" />
+                <path d="M128 286 C214 248 292 178 366 178 S474 232 604 282" />
+                <path d="M208 70 C276 98 350 118 430 132 S560 136 696 182" />
+                <circle cx="42" cy="312" r="3" />
+                <circle cx="230" cy="140" r="3" />
+                <circle cx="384" cy="258" r="3" />
+                <circle cx="566" cy="246" r="3" />
+                <circle cx="724" cy="124" r="3" />
+                <circle cx="376" cy="178" r="3.2" />
+                <circle cx="604" cy="282" r="2.8" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="cognition"></div>
+              </div>
+            </button>
+
+            <button class="survey-layer layer-decision" data-layer="decision">
+              <span class="layer-side">L4 / DECISION</span>
+              <span class="layer-title">阈值选择</span>
+              <span class="layer-subtitle">INTERVENTION THRESHOLD</span>
+              <span class="layer-caption">GATE / BRANCH / SELECT</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M64 214 C166 214 258 214 344 214 S488 168 708 112" />
+                <path d="M344 214 C470 226 574 286 708 320" />
+                <path d="M344 214 C460 214 574 214 708 228" />
+                <path d="M170 122 C240 156 288 188 344 214" />
+                <path d="M146 292 C232 268 290 240 344 214" />
+                <path d="M344 214 C446 182 542 140 638 88" />
+                <circle cx="64" cy="214" r="3" />
+                <circle cx="344" cy="214" r="5" />
+                <circle cx="708" cy="110" r="3" />
+                <circle cx="708" cy="226" r="3" />
+                <circle cx="708" cy="318" r="3" />
+                <circle cx="146" cy="292" r="3" />
+                <circle cx="638" cy="88" r="3" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="decision"></div>
+              </div>
+            </button>
+
+            <button class="survey-layer layer-orchestration" data-layer="orchestration">
+              <span class="layer-side">L5 / ORCHESTRATION</span>
+              <span class="layer-title">路径编排</span>
+              <span class="layer-subtitle">DEVICE / ROUTE / TASK</span>
+              <span class="layer-caption">ROUTING / STRATEGY HUB</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M70 206 C180 110 282 110 378 206 S572 302 694 206" />
+                <path d="M190 86 C256 150 318 206 378 206 S502 142 574 86" />
+                <path d="M186 330 C256 270 320 206 378 206 S504 264 580 332" />
+                <path d="M88 156 C188 176 270 188 378 206 S540 232 686 258" />
+                <circle cx="190" cy="86" r="3" />
+                <circle cx="186" cy="330" r="3" />
+                <circle cx="378" cy="206" r="5" />
+                <circle cx="574" cy="86" r="3" />
+                <circle cx="580" cy="332" r="3" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="orchestration"></div>
+              </div>
+            </button>
+
+            <button class="survey-layer layer-execution" data-layer="execution">
+              <span class="layer-side">L6 / EXECUTION</span>
+              <span class="layer-title">执行反馈</span>
+              <span class="layer-subtitle">COMMAND / VOICE / FEEDBACK</span>
+              <span class="layer-caption">OUTPUT / RETURN LOOP</span>
+              <svg class="trace-svg" viewBox="0 0 760 420" preserveAspectRatio="none">
+                <path d="M48 288 C132 248 192 182 278 192 S438 320 544 276 S632 182 718 144" />
+                <path d="M82 132 C170 156 242 252 330 258 S466 202 586 144 S666 116 720 122" />
+                <path d="M124 80 C212 114 302 154 390 214 S530 304 704 332" />
+                <path d="M148 312 C248 298 336 288 430 290 S556 302 680 286" />
+                <circle cx="82" cy="132" r="3" />
+                <circle cx="278" cy="192" r="3" />
+                <circle cx="430" cy="290" r="3" />
+                <circle cx="586" cy="144" r="3" />
+                <circle cx="704" cy="332" r="3" />
+                <g class="flow-packets"></g>
+              </svg>
+              <div class="layer-data-hud">
+                <div class="layer-data-title">DATA FLOW</div>
+                <div class="layer-data-tags" data-layer-tags="execution"></div>
+              </div>
+            </button>
+          </div>
+
+          <div class="activation-lines">
+            <span class="activation-line line-1"></span>
+            <span class="activation-line line-2"></span>
+            <span class="activation-line line-3"></span>
+            <span class="activation-line line-4"></span>
+            <span class="activation-line line-5"></span>
+          </div>
+
+          <div class="writeback-panel">
+            <div class="writeback-title">WRITEBACK / MEMORY UPDATE</div>
+            <div class="writeback-stream" id="writebackStream"></div>
+          </div>
+
+          <div class="sequence-shell">
+            <div class="sequence-kicker">RUNTIME STATE MACHINE</div>
+            <div class="sequence-track" id="storyStrip">
+              <button class="story-step active" data-step="capture">CAPTURE</button>
+              <button class="story-step" data-step="perception">PERCEPTION</button>
+              <button class="story-step" data-step="fusion">FUSION</button>
+              <button class="story-step" data-step="cognition">COGNITION</button>
+              <button class="story-step" data-step="decision">DECISION</button>
+              <button class="story-step" data-step="orchestration">ORCHESTRATION</button>
+              <button class="story-step" data-step="execution">EXECUTION</button>
+              <button class="story-step" data-step="writeback">WRITEBACK</button>
+            </div>
+          </div>
+        </div>
+        <aside class="data-rail mind-side">
+          <section class="rail-panel annotation-panel">
+            <div class="panel-title-row">
+              <span class="panel-title">ACTIVE REGION</span>
+              <span class="panel-dot panel-dot-passive"></span>
+            </div>
+            <div class="focus-name" id="focusValue">整体舞台</div>
+            <div class="panel-copy" id="detailVisual">爆炸分层、白色测绘线稿、红色激活路径、技术剖面标注。</div>
+            <div class="panel-copy" id="detailNarrative">把 Evans 的思考过程视作一张不断被剖开的认知地图，而不是普通流程图。</div>
+            <div class="tag-grid" id="detailTags"></div>
+          </section>
+
+          <section class="rail-panel live-panel">
+            <div class="panel-title-row">
+              <span class="panel-title">LIVE STATUS</span>
+              <span class="panel-dot" id="connDot"></span>
+            </div>
+            <div class="panel-major" id="connText">DEMO MODE</div>
+            <div class="panel-copy" id="thoughtStatus">等待连接到 Evans 后端</div>
+            <div class="panel-copy" id="currentThoughtText">当前为风格演示模式。连接 Live 后，场景、决策、记忆和日志会由真实后端结果驱动。</div>
+            <div class="button-stack">
+              <button id="connectLiveBtn" class="line-btn">连接 Live</button>
+              <button id="cameraBtn" class="line-btn">打开摄像头</button>
+              <button id="analyzeBtn" class="line-btn">触发分析</button>
+              <button id="resetViewBtn" class="line-btn">重置视角</button>
+              <button id="pulseBtn" class="line-btn">切换脉冲</button>
+            </div>
+            <textarea id="promptInput" class="prompt-input" placeholder="输入一句语境补充，例如：我现在正在准备答辩，有点紧张。"></textarea>
+            <div class="camera-shell" id="cameraShell">
+              <video id="cameraVideo" autoplay playsinline muted></video>
+              <canvas id="cameraCanvas"></canvas>
+            </div>
+          </section>
+
+          <section class="rail-panel data-panel">
+            <div class="panel-title">RUNTIME SNAPSHOT</div>
+            <div class="runtime-grid">
+              <div class="runtime-card">
+                <span>SCENE</span>
+                <strong id="runtimeScene">WAITING</strong>
+              </div>
+              <div class="runtime-card">
+                <span>ANALYZE</span>
+                <strong id="runtimeAnalyzeCount">0</strong>
+              </div>
+              <div class="runtime-card">
+                <span>MEMORY</span>
+                <strong id="runtimeMemoryCount">0</strong>
+              </div>
+              <div class="runtime-card">
+                <span>PROACTIVE</span>
+                <strong id="runtimeAdvice">OBSERVE</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="rail-panel log-panel">
+            <div class="panel-title">EVENT LOG</div>
+            <div class="runtime-list" id="runtimeLog"></div>
+          </section>
+
+          <section class="rail-panel log-panel">
+            <div class="panel-title">TIMELINE</div>
+            <div class="runtime-list" id="runtimeTimeline"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="layer-overlay" id="layerOverlay" hidden>
+    <div class="overlay-grid">
+      <section class="overlay-stage-panel">
+        <div class="overlay-stage">
+          <div class="overlay-svg-shell" id="overlaySvgShell"></div>
+        </div>
+      </section>
+
+      <aside class="overlay-side-panel" hidden>
+        <section class="overlay-info-block">
+          <div class="panel-title">CHAIN POSITION</div>
+          <div class="overlay-chain" id="overlayChain"></div>
+        </section>
+
+        <section class="overlay-info-block">
+          <div class="panel-title">UPSTREAM / DOWNSTREAM</div>
+          <div class="overlay-io-grid">
+            <div>
+              <div class="overlay-io-title">INPUT</div>
+              <div class="overlay-io-list" id="overlayInputList"></div>
+            </div>
+            <div>
+              <div class="overlay-io-title">OUTPUT</div>
+              <div class="overlay-io-list" id="overlayOutputList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="overlay-info-block">
+          <div class="panel-title">REAL FIELDS</div>
+          <div class="overlay-field-list" id="overlayFieldList"></div>
+        </section>
+
+        <section class="overlay-info-block">
+          <div class="panel-title">LIVE SUMMARY</div>
+          <div class="panel-copy" id="overlaySummaryText">等待真实分析结果</div>
+        </section>
+      </aside>
+
+      <div class="overlay-hidden-nodes" hidden>
+        <div class="overlay-kicker" id="overlayLayerCode">LAYER</div>
+        <h2 id="overlayLayerTitle">单层剖面</h2>
+        <div class="overlay-subtitle" id="overlayLayerSubtitle">当前层真实数据流</div>
+        <span id="overlayStepStatus">WAITING</span>
+        <span id="overlayFlowCount">0 TOKENS</span>
+        <button class="line-btn" id="overlayFullscreenBtn">浏览器全屏</button>
+        <button class="line-btn" id="overlayCloseBtn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./mind-exhibit.js"></script>
+</body>
+</html>
