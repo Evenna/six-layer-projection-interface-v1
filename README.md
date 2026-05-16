@@ -1,3 +1,13 @@
+# 六层投影统一界面初版
+
+Evans 毕设展览用思维可视化网页：将感知、融合、认知、决策、编排、执行六层链路组织成统一的黑红展陈界面。
+
+- 预览入口：`/mind`
+- 静态页面：`static/mind-exhibit.html`
+- 样式与交互：`static/mind-exhibit.css`、`static/mind-exhibit.js`
+
+---
+
 # Nexus Core（evans）
 
 面向物理世界的智能体原型，包含：
