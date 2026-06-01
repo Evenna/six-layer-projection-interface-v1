@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI 智能体系统架构 · Cognitive Pipeline</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#040404;color:#dcdcdc;font-family:"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;overflow-x:auto}
+
+:root{
+  --red:#e8492f;
+  --red-d:#b8392b;
+  --red-dim:#6e2218;
+  --gray:#8a8a8a;
+  --txt:#d8d8d8;
+  --txt-dim:#6a6a6a;
+  --line:#1c1c1c;
+  --wire:#4a4a4a;
+  --wire-dim:#2c2c2c;
+  --border:#191919;
+}
+
+/* ───── STAGE ───── */
+.stage{
+  position:relative;
+  width:1720px;
+  margin:0 auto;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 35%,rgba(232,73,47,0.035) 0%,transparent 70%),
+    #040404;
+  padding:26px 34px 32px;
+  min-height:1000px;
+}
+
+/* ───── TOP HEADER ───── */
+.headers{
+  position:relative;
+  display:flex;
+  margin-left:186px;
+  margin-bottom:20px;
+  z-index:6;
+}
+.hdr{flex:0 0 auto;display:flex;align-items:flex-start;position:relative}
+.hdr-lbl{display:flex;flex-direction:column;min-width:118px}
+.hdr .num{font-size:9.5px;color:#6e6e6e;letter-spacing:2px;font-weight:300}
+.hdr .zh{font-size:15px;color:#f2f2f2;font-weight:500;letter-spacing:3px;margin-top:2px}
+.hdr .en{font-size:7.5px;color:#565656;letter-spacing:2.5px;margin-top:3px}
+.hdr-arrow{flex:1;height:1px;position:relative;margin:9px 10px 0}
+.hdr-arrow::before{
+  content:'';position:absolute;left:0;right:9px;top:0;height:1px;
+  background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 4px,transparent 4px,transparent 9px);
+  opacity:0.55;
+}
+.hdr-arrow::after{
+  content:'';position:absolute;right:0;top:-4px;
+  border:5px solid transparent;border-left-color:var(--red);
+  filter:drop-shadow(0 0 4px rgba(232,73,47,0.7));
+}
+.hdr-dot{position:absolute;left:-3px;top:-2px;width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red)}
+
+/* ───── MAIN GRID ───── */
+.grid{position:relative;width:1652px;height:610px}
+.vline{display:none}
+
+.col{position:absolute;top:0;height:610px;z-index:3;display:flex;flex-direction:column}
+.col-user   {left:0;     width:148px}
+.col-percep {left:186px; width:172px}
+.col-mem    {left:396px; width:176px}
+.col-cog    {left:610px; width:198px}
+.col-dec    {left:846px; width:172px}
+.col-disp   {left:1056px;width:202px}
+.col-exec   {left:1296px;width:356px}
+
+/* body groups sub-sections compactly at the top with consistent spacing (tidy, not stretched) */
+.col-body{flex:1;display:flex;flex-direction:column;justify-content:flex-start;gap:18px;min-height:0}
+
+.col-title{font-size:11px;color:#eee;font-weight:500;letter-spacing:2px;margin-bottom:2px}
+.col-sub{font-size:7px;color:#525252;letter-spacing:2px;margin-bottom:9px;text-transform:uppercase}
+
+/* ───── CARD (frameless) ───── */
+.card{
+  background:transparent;border:0;
+  padding:4px 2px;margin-bottom:10px;position:relative;
+}
+.card-h{margin-bottom:8px}
+.card-h .zh{font-size:10.5px;color:#e2e2e2;font-weight:500;letter-spacing:1.5px}
+.card-h .en{font-size:7px;color:#525252;letter-spacing:2px;margin-top:2px;text-transform:uppercase}
+
+/* ───── USER INPUT ───── */
+.user-quote{
+  background:transparent;border:0;border-left:2px solid var(--red);
+  padding:2px 6px 2px 12px;font-size:9px;color:#9a9a9a;line-height:1.7;position:relative;margin-bottom:8px;
+}
+.user-quote::before{content:'"';position:absolute;top:-4px;left:4px;color:var(--red);font-size:18px;line-height:1.4}
+.user-wave{display:flex;align-items:center;gap:1.5px;height:18px;padding:0 2px;margin-bottom:11px}
+.user-wave .b{width:2px;background:linear-gradient(180deg,var(--red),var(--red-d));border-radius:1px;animation:wb 1.4s ease-in-out infinite}
+.user-photo{width:164px;height:118px;border:1px solid var(--border);border-radius:2px;overflow:hidden;position:relative;margin-bottom:9px}
+.user-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.08) brightness(0.82)}
+.user-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,0.45));pointer-events:none}
+.user-meta{font-size:8px;color:#525252;line-height:1.9;padding:5px 2px 0;border-top:1px solid #131313}
+.user-meta .time{font-size:12px;color:#bbb;font-weight:300;letter-spacing:3px;display:block;margin-bottom:3px}
+.user-meta .tag{display:inline-block;background:rgba(28,28,28,0.7);border:1px solid #1c1c1c;border-radius:1px;padding:1px 5px;margin-right:3px;margin-bottom:2px;color:#787878;font-size:8px;letter-spacing:1px}
+
+/* ───── PERCEPTION ───── */
+.p-list{display:flex;flex-direction:column;gap:8px}
+.p-item{
+  display:flex;align-items:center;gap:9px;
+  background:transparent;border:0;padding:4px 0;position:relative;
+}
+.p-icon{width:33px;height:33px;border:1px solid #333;border-radius:50%;background:radial-gradient(circle at 50% 40%,#141414,#080808);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 0 8px rgba(232,73,47,0.15),0 0 0 3px rgba(232,73,47,0.04)}
+.p-icon svg{width:15px;height:15px;fill:none;stroke:var(--red);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.p-tx .zh{font-size:10px;color:#cfcfcf;letter-spacing:1px}
+.p-tx .en{font-size:7px;color:#525252;letter-spacing:1.5px;margin-top:1px}
+.p-wave{margin-left:auto;display:flex;align-items:center;gap:1px;height:15px}
+.p-wave .b{width:1.5px;background:var(--red);border-radius:0.5px;animation:wb 0.9s ease-in-out infinite}
+@keyframes wb{0%,100%{transform:scaleY(0.3);opacity:0.5}50%{transform:scaleY(1);opacity:1}}
+
+/* ───── MEMORY DB ───── */
+.db-list{display:flex;flex-direction:column;gap:7px}
+.db-item{display:flex;align-items:center;gap:9px;background:transparent;border:0;padding:3px 0;position:relative}
+.db-icon{width:24px;height:24px;border:1px solid #333;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:radial-gradient(circle at 50% 40%,#131313,#070707)}
+.db-icon svg{width:11px;height:11px;fill:none;stroke:#9a9a9a;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.db-tx .zh{font-size:9px;color:#bcbcbc;letter-spacing:1px}
+.db-tx .en{font-size:6.5px;color:#525252;letter-spacing:1.5px;margin-top:1px}
+
+.stage-3d{display:flex;align-items:center;justify-content:center}
+
+/* perception / execution lists fill the column height & spread evenly */
+.p-list,.exec-list{flex:1;justify-content:space-between;gap:10px}
+.col-body > *:last-child{margin-bottom:0}
+
+/* memory: octahedron grows to fill, database pinned below */
+.col-mem .stage-3d{flex:1;margin-bottom:0!important}
+
+/* user: photo grows, meta pinned to column bottom for a clean base line */
+.col-user .col-body{gap:11px}
+.col-user .user-photo{flex:1;min-height:130px}
+.col-user .user-meta{margin-top:auto;padding-top:8px}
+
+/* ───── DECISION SCORES (frameless) ───── */
+.score-box{background:transparent;border:0;padding:4px 2px;position:relative}
+.score-row{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.score-row:last-child{margin-bottom:0}
+.score-lbl{width:64px;flex-shrink:0}
+.score-lbl .zh{display:block;font-size:9px;color:#b0b0b0;letter-spacing:1px}
+.score-lbl .en{display:block;font-size:6.5px;color:#525252;letter-spacing:1.5px;margin-top:1px}
+.score-bar{flex:1;height:3px;background:#161616;border-radius:2px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--red-d),var(--red));border-radius:2px;box-shadow:0 0 5px rgba(232,73,47,0.4)}
+.score-fill.blue{background:linear-gradient(90deg,#285a7a,#3a90c4);box-shadow:0 0 5px rgba(58,144,196,0.4)}
+.score-val{width:30px;text-align:right;font-size:11px;color:var(--red);font-weight:600;letter-spacing:0.5px;font-family:"Helvetica Neue",sans-serif}
+.score-val.blue{color:#3a90c4}
+
+/* ───── WEIGHTED SCORE ───── */
+.ws-h{text-align:center}
+.ws-h .zh{font-size:9.5px;color:#cfcfcf;letter-spacing:2px}
+.ws-h .en{font-size:7px;color:#525252;letter-spacing:2px;display:block;margin-top:2px}
+.ws-value{text-align:center;font-size:30px;color:var(--red);font-weight:700;letter-spacing:2px;line-height:1;text-shadow:0 0 18px rgba(232,73,47,0.6);font-family:"Helvetica Neue",sans-serif}
+
+/* ───── DECISION OUTPUT ───── */
+.dec-list{display:flex;flex-direction:column;gap:1px}
+.dec-row{display:flex;align-items:center;gap:8px;padding:4px 2px;border-bottom:1px solid #121212;font-size:9.5px;color:#6e6e6e;letter-spacing:1px}
+.dec-row:last-child{border-bottom:none}
+.dec-row.on{color:#dcdcdc}
+.chk{width:11px;height:11px;border:1px solid #2c2c2c;border-radius:1px;flex-shrink:0;position:relative}
+.chk.on{background:var(--red);border-color:var(--red);box-shadow:0 0 5px rgba(232,73,47,0.6)}
+.chk.on::after{content:'';position:absolute;left:3px;top:0.5px;width:3px;height:6px;border:solid #fff;border-width:0 1.4px 1.4px 0;transform:rotate(45deg)}
+
+/* ───── GANTT ───── */
+.gantt-axis{display:flex;justify-content:space-between;font-size:6.5px;color:#444;padding-left:20px;margin-bottom:5px;letter-spacing:0.5px}
+.gantt-row{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.gantt-lbl{width:14px;font-size:7px;color:#666;text-align:right}
+.gantt-track{flex:1;height:5px;background:#0c0c0c;border-radius:2px;position:relative;border:1px solid #151515}
+.gantt-bar{height:100%;position:absolute;border-radius:2px;top:0;box-shadow:0 0 4px rgba(232,73,47,0.3)}
+
+/* ───── RESOURCE BAR ───── */
+.res-bar-row{display:flex;align-items:center;gap:6px;font-size:8px;color:#666;letter-spacing:1px}
+.res-bar-bg{flex:1;height:3px;background:#141414;border-radius:1px;overflow:hidden}
+.res-bar-fill{height:100%;background:linear-gradient(90deg,var(--red-d),var(--red))}
+
+/* ───── EXECUTION ───── */
+.exec-list{display:flex;flex-direction:column;gap:9px}
+.exec-item{display:flex;align-items:center;gap:11px;background:transparent;border:0;padding:5px 0;position:relative;min-height:46px}
+.exec-icon{width:36px;height:36px;border:1px solid #333;border-radius:6px;background:radial-gradient(circle at 50% 35%,#141414,#070707);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 0 8px rgba(255,255,255,0.03)}
+.exec-icon svg{width:18px;height:18px;fill:none;stroke:#a8a8a8;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.exec-body{flex:1;min-width:0}
+.exec-body .name{font-size:10px;color:#d4d4d4;letter-spacing:1px}
+.exec-body .act{font-size:8px;color:#666;margin-top:1px;letter-spacing:1px}
+.exec-meta{font-size:10px;color:#666;text-align:right;flex-shrink:0;letter-spacing:1px;font-family:"Helvetica Neue",sans-serif}
+.exec-meta.hot{color:var(--red)}
+.exec-meta.warm{color:#e0a838}
+.exec-progress{height:2.5px;background:#141414;border-radius:1px;overflow:hidden;margin-top:5px}
+.exec-progress .fill{height:100%;border-radius:1px}
+
+/* ───── BOTTOM ───── */
+.bot-wrap{position:relative;width:1652px;height:170px;margin-top:16px}
+.legend{position:absolute;left:0;top:34px;width:170px;display:flex;flex-direction:column;gap:10px}
+.legend-row{display:flex;align-items:center;gap:11px}
+.lg-line{width:38px;height:1px;flex-shrink:0;position:relative}
+.lg-line.d{background:#bcbcbc}
+.lg-line.c{background:var(--red);box-shadow:0 0 3px rgba(232,73,47,0.6)}
+.lg-line.m{background:repeating-linear-gradient(90deg,#8a8a8a 0,#8a8a8a 4px,transparent 4px,transparent 8px)}
+.lg-line.f{background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 4px,transparent 4px,transparent 8px)}
+.lg-line::after{content:'';position:absolute;right:-1px;top:-3.5px;border:3.5px solid transparent}
+.lg-line.d::after{border-left-color:#bcbcbc}
+.lg-line.c::after{border-left-color:var(--red)}
+.lg-line.m::after{border-left-color:#8a8a8a}
+.lg-line.f::after{border-left-color:var(--red)}
+.lg-tx .zh{font-size:9px;color:#aaa;display:block;letter-spacing:1px}
+.lg-tx .en{font-size:6.5px;color:#525252;display:block;letter-spacing:1.5px;margin-top:1px}
+
+.ext-knowledge{position:absolute;left:250px;top:0;width:380px;height:160px}
+.ek-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);text-align:center;z-index:5}
+.ek-label .zh{font-size:9.5px;color:#bcbcbc;letter-spacing:2px}
+.ek-label .en{font-size:6.5px;color:#525252;letter-spacing:2px;display:block;margin-top:2px}
+
+.feedback{position:absolute;left:690px;top:30px;width:940px}
+.feedback-h .zh{font-size:10px;color:#dcdcdc;letter-spacing:2px}
+.feedback-h .en{font-size:6.5px;color:#525252;letter-spacing:2px;display:block;margin-top:2px;margin-bottom:3px}
+
+/* ───── OVERLAYS ───── */
+.overlay{position:absolute;top:0;left:0;width:1652px;height:610px;z-index:2;pointer-events:none}
+.bot-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.particle{filter:drop-shadow(0 0 3px var(--red))}
+
+/* ───── ToM card ───── */
+.tom-card{text-align:center;padding:8px 0}
+.tom-card .zh{font-size:11px;color:#e2e2e2;font-weight:500;letter-spacing:2.5px}
+.tom-card .en{font-size:6.5px;color:#525252;letter-spacing:2.5px;margin-top:2px;display:block}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- ════ HEADER ════ -->
+  <div class="headers">
+    <div class="hdr" style="width:210px"><div class="hdr-lbl"><span class="num">01</span><span class="zh">感知层</span><span class="en">PERCEPTION</span></div><div class="hdr-arrow"><span class="hdr-dot"></span></div></div>
+    <div class="hdr" style="width:214px"><div class="hdr-lbl"><span class="num">02</span><span class="zh">记忆层</span><span class="en">MEMORY</span></div><div class="hdr-arrow"><span class="hdr-dot"></span></div></div>
+    <div class="hdr" style="width:236px"><div class="hdr-lbl"><span class="num">03</span><span class="zh">认知层</span><span class="en">COGNITION</span></div><div class="hdr-arrow"><span class="hdr-dot"></span></div></div>
+    <div class="hdr" style="width:210px"><div class="hdr-lbl"><span class="num">04</span><span class="zh">决策层</span><span class="en">DECISION</span></div><div class="hdr-arrow"><span class="hdr-dot"></span></div></div>
+    <div class="hdr" style="width:240px"><div class="hdr-lbl"><span class="num">05</span><span class="zh">调度层</span><span class="en">DISPATCH</span></div><div class="hdr-arrow"><span class="hdr-dot"></span></div></div>
+    <div class="hdr" style="width:356px"><div class="hdr-lbl"><span class="num">06</span><span class="zh">执行层</span><span class="en">EXECUTION</span></div></div>
+  </div>
+
+  <!-- ════ MAIN GRID ════ -->
+  <div class="grid">
+
+    <div class="vline" style="left:198px"></div>
+    <div class="vline" style="left:406px"></div>
+    <div class="vline" style="left:610px"></div>
+    <div class="vline" style="left:836px"></div>
+    <div class="vline" style="left:1038px"></div>
+    <div class="vline" style="left:1272px"></div>
+
+    <!-- ════ FLOW OVERLAY — bright adjacent-stage connectors w/ end-nodes ════ -->
+    <svg class="overlay" viewBox="0 0 1652 610" preserveAspectRatio="none">
+      <defs>
+        <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff"/><stop offset="40%" stop-color="#e8492f"/><stop offset="100%" stop-color="#e8492f" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="dotGlowW" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff"/><stop offset="50%" stop-color="#cfd4da"/><stop offset="100%" stop-color="#cfd4da" stop-opacity="0"/>
+        </radialGradient>
+        <marker id="arW" markerWidth="7" markerHeight="7" refX="5" refY="3.4" orient="auto"><path d="M0,0.6 L6,3.4 L0,6.2 z" fill="#cdd2d8"/></marker>
+        <marker id="arR" markerWidth="7" markerHeight="7" refX="5" refY="3.4" orient="auto"><path d="M0,0.6 L6,3.4 L0,6.2 z" fill="#f0573b"/></marker>
+      </defs>
+
+      <!-- ════ helper: each connector = source node ● ═══▶ target node, bright + glow ════ -->
+
+      <!-- DATA FLOW (white/gray) : USER → PERCEPTION → MEMORY → COGNITION -->
+      <!-- G1 USER(148) → PERCEPTION(186) @ y280 -->
+      <g class="conn">
+        <circle cx="148" cy="280" r="2.4" fill="#cdd2d8"/>
+        <path d="M148,272 C166,272 170,280 186,280" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+        <path id="g1" d="M148,280 L186,280" stroke="#dfe3e8" stroke-width="1.25" fill="none" opacity="0.9" marker-end="url(#arW)"/>
+        <path d="M148,288 C166,288 170,280 186,280" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+      </g>
+      <circle r="2" fill="url(#dotGlowW)" class="particle"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#g1"/></animateMotion></circle>
+
+      <!-- G2 PERCEPTION(358) → MEMORY(396) @ y240 -->
+      <g class="conn">
+        <circle cx="358" cy="240" r="2.4" fill="#cdd2d8"/>
+        <path d="M358,231 C376,231 380,240 396,240" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+        <path id="g2" d="M358,240 L396,240" stroke="#dfe3e8" stroke-width="1.25" fill="none" opacity="0.9" marker-end="url(#arW)"/>
+        <path d="M358,249 C376,249 380,240 396,240" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+      </g>
+      <circle r="2" fill="url(#dotGlowW)" class="particle"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#g2"/></animateMotion></circle>
+
+      <!-- G3 MEMORY(572) → COGNITION(610) @ y210 -->
+      <g class="conn">
+        <circle cx="572" cy="210" r="2.4" fill="#cdd2d8"/>
+        <path d="M572,201 C590,201 594,210 610,210" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+        <path id="g3" d="M572,210 L610,210" stroke="#dfe3e8" stroke-width="1.25" fill="none" opacity="0.9" marker-end="url(#arW)"/>
+        <path d="M572,219 C590,219 594,210 610,210" stroke="#9aa0a8" stroke-width="0.7" fill="none" opacity="0.5"/>
+      </g>
+      <circle r="2" fill="url(#dotGlowW)" class="particle"><animateMotion dur="2.3s" repeatCount="indefinite"><mpath href="#g3"/></animateMotion></circle>
+
+      <!-- CONTROL FLOW (red) : COGNITION → DECISION → DISPATCH → EXECUTION -->
+      <!-- G4 COGNITION(808) → DECISION(846) @ y150 -->
+      <g class="conn">
+        <circle cx="808" cy="150" r="2.4" fill="#f0573b"/>
+        <path d="M808,141 C826,141 830,150 846,150" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+        <path id="g4" d="M808,150 L846,150" stroke="#f0573b" stroke-width="1.25" fill="none" opacity="0.92" marker-end="url(#arR)"/>
+        <path d="M808,159 C826,159 830,150 846,150" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+      </g>
+      <circle r="2" fill="url(#dotGlow)" class="particle"><animateMotion dur="2.0s" repeatCount="indefinite"><mpath href="#g4"/></animateMotion></circle>
+
+      <!-- G5 DECISION(1018) → DISPATCH(1056) @ y150 -->
+      <g class="conn">
+        <circle cx="1018" cy="150" r="2.4" fill="#f0573b"/>
+        <path d="M1018,141 C1036,141 1040,150 1056,150" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+        <path id="g5" d="M1018,150 L1056,150" stroke="#f0573b" stroke-width="1.25" fill="none" opacity="0.92" marker-end="url(#arR)"/>
+        <path d="M1018,159 C1036,159 1040,150 1056,150" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+      </g>
+      <circle r="2" fill="url(#dotGlow)" class="particle"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#g5"/></animateMotion></circle>
+
+      <!-- G6 DISPATCH(1258) → EXECUTION(1296) @ y290 -->
+      <g class="conn">
+        <circle cx="1258" cy="290" r="2.4" fill="#f0573b"/>
+        <path d="M1258,281 C1276,281 1280,290 1296,290" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+        <path id="g6" d="M1258,290 L1296,290" stroke="#f0573b" stroke-width="1.25" fill="none" opacity="0.92" marker-end="url(#arR)"/>
+        <path d="M1258,299 C1276,299 1280,290 1296,290" stroke="#c1402a" stroke-width="0.7" fill="none" opacity="0.55"/>
+      </g>
+      <circle r="2" fill="url(#dotGlow)" class="particle"><animateMotion dur="1.9s" repeatCount="indefinite"><mpath href="#g6"/></animateMotion></circle>
+
+      <!-- DECISION internal: weighted score → decision output (vertical) -->
+      <path id="dv" d="M933,452 L933,486" stroke="#f0573b" stroke-width="1" stroke-dasharray="3,3" fill="none" opacity="0.7"/>
+      <polygon points="928,481 938,481 933,491" fill="#f0573b" opacity="0.9"/>
+      <circle r="1.5" fill="url(#dotGlow)" class="particle"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#dv"/></animateMotion></circle>
+    </svg>
+
+    <!-- ════ USER INPUT ════ -->
+    <div class="col col-user">
+      <div class="col-title">用户输入</div>
+      <div class="col-sub">USER INPUT</div>
+      <div class="col-body">
+      <div class="user-quote">今天是个特别的日子……1985 年的今天，我和老伴儿认识的，我有点想念……</div>
+      <div class="user-wave" id="uwave"></div>
+      <div class="user-photo"><img src="elderly-man-night.png" alt="user"/></div>
+      <div class="user-meta">
+        <span class="time">23:47</span>
+        <span class="tag">客厅</span><span class="tag">独白</span>
+        <span class="tag">21°C</span><span class="tag">轻度昏暗</span>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 01 PERCEPTION ════ -->
+    <div class="col col-percep">
+      <div class="col-title">多模态感知</div>
+      <div class="col-sub">MULTI-MODAL SENSING</div>
+      <div class="col-body">
+      <div class="p-list">
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"/></svg></div>
+          <div class="p-tx"><div class="zh">语音输入</div><div class="en">VOICE</div></div>
+          <div class="p-wave" data-mini></div>
+        </div>
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="13" rx="2"/><path d="M7 9h10M7 12.5h6"/><path d="M9.5 17.5l-1.5 3M14.5 17.5l1.5 3"/></svg></div>
+          <div class="p-tx"><div class="zh">语义识别</div><div class="en">NLP</div></div>
+        </div>
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="p-tx"><div class="zh">视觉感知</div><div class="en">VISION</div></div>
+        </div>
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M2 13h4l2-5 3 9 2.5-6 1.5 2H22"/></svg></div>
+          <div class="p-tx"><div class="zh">生理信号</div><div class="en">BIOMETRIC</div></div>
+        </div>
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20z"/><path d="M9 21.5v-7h6v7"/></svg></div>
+          <div class="p-tx"><div class="zh">环境感知</div><div class="en">CONTEXT</div></div>
+        </div>
+        <div class="p-item">
+          <div class="p-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg></div>
+          <div class="p-tx"><div class="zh">历史行为</div><div class="en">HISTORY</div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 02 MEMORY ════ -->
+    <div class="col col-mem">
+      <div class="col-title">记忆检索</div>
+      <div class="col-sub">MEMORY RETRIEVAL</div>
+      <div class="col-body">
+
+      <!-- Dot-grid octahedron diamond -->
+      <div class="stage-3d" style="height:208px;margin-bottom:14px">
+        <svg width="184" height="200" viewBox="0 0 184 200">
+          <defs>
+            <radialGradient id="memCore" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="#e8492f"/><stop offset="100%" stop-color="#e8492f" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- octahedron wireframe -->
+          <g stroke="var(--wire)" stroke-width="0.6" fill="none" opacity="0.8">
+            <polygon points="92,14 168,100 92,186 16,100"/>
+            <line x1="16" y1="100" x2="168" y2="100"/>
+            <line x1="92" y1="14" x2="92" y2="186"/>
+            <!-- inner diamonds (depth) -->
+            <polygon points="92,40 142,100 92,160 42,100" stroke="var(--wire-dim)"/>
+            <polygon points="92,64 120,100 92,136 64,100" stroke="var(--wire-dim)"/>
+          </g>
+          <!-- dot lattice across faces -->
+          <g fill="#5a5a5a">
+            <!-- top quadrants grid dots -->
+            <circle cx="92" cy="14" r="1.4"/><circle cx="54" cy="57" r="1.2"/><circle cx="130" cy="57" r="1.2"/>
+            <circle cx="73" cy="36" r="1"/><circle cx="111" cy="36" r="1"/>
+            <circle cx="35" cy="78" r="1.2"/><circle cx="149" cy="78" r="1.2"/>
+            <circle cx="16" cy="100" r="1.4"/><circle cx="168" cy="100" r="1.4"/>
+            <circle cx="92" cy="100" r="1"/>
+            <circle cx="54" cy="143" r="1.2"/><circle cx="130" cy="143" r="1.2"/>
+            <circle cx="35" cy="122" r="1.2"/><circle cx="149" cy="122" r="1.2"/>
+            <circle cx="73" cy="164" r="1"/><circle cx="111" cy="164" r="1"/>
+            <circle cx="92" cy="186" r="1.4"/>
+            <circle cx="73" cy="78" r="0.9"/><circle cx="111" cy="78" r="0.9"/>
+            <circle cx="73" cy="122" r="0.9"/><circle cx="111" cy="122" r="0.9"/>
+          </g>
+          <!-- highlighted red lattice dots (active retrieval) -->
+          <g fill="var(--red)">
+            <circle cx="168" cy="100" r="2.2"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/></circle>
+            <circle cx="130" cy="57" r="1.8"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.4s" repeatCount="indefinite"/></circle>
+            <circle cx="54" cy="143" r="1.8"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="92" cy="14" r="2"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="35" cy="78" r="1.6"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.6s" repeatCount="indefinite"/></circle>
+          </g>
+          <!-- glowing core -->
+          <circle cx="92" cy="100" r="18" fill="url(#memCore)" opacity="0.5"><animate attributeName="r" values="14;20;14" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="92" cy="100" r="4" fill="var(--red)"><animate attributeName="r" values="3.5;5;3.5" dur="1.6s" repeatCount="indefinite"/></circle>
+          <g stroke="var(--red)" stroke-width="0.35" opacity="0.45">
+            <line x1="92" y1="100" x2="168" y2="100"/><line x1="92" y1="100" x2="16" y2="100"/>
+            <line x1="92" y1="100" x2="92" y2="14"/><line x1="92" y1="100" x2="92" y2="186"/>
+            <line x1="92" y1="100" x2="130" y2="57"/><line x1="92" y1="100" x2="54" y2="143"/>
+          </g>
+        </svg>
+      </div>
+
+      <div>
+      <div class="card-h"><div class="zh">记忆库</div><div class="en">MEMORY DATABASE</div></div>
+      <div class="db-list">
+        <div class="db-item"><div class="db-icon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div><div class="db-tx"><div class="zh">人性记忆</div><div class="en">PERSONAL MEMORY</div></div></div>
+        <div class="db-item"><div class="db-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7l3 9M16 7l-3 9M8.5 6h7"/></svg></div><div class="db-tx"><div class="zh">情景记忆</div><div class="en">EPISODIC MEMORY</div></div></div>
+        <div class="db-item"><div class="db-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div><div class="db-tx"><div class="zh">行为模型</div><div class="en">BEHAVIOR MODEL</div></div></div>
+        <div class="db-item"><div class="db-icon"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 7a4 4 0 0 1 7 3.5C19 15.6 12 20 12 20z"/></svg></div><div class="db-tx"><div class="zh">情感状态库</div><div class="en">AFFECTIVE MEMORY</div></div></div>
+      </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 03 COGNITION ════ -->
+    <div class="col col-cog">
+      <div class="col-title">意图理解</div>
+      <div class="col-sub">INTENT UNDERSTANDING</div>
+      <div class="col-body">
+
+      <!-- Wireframe cube w/ red core -->
+      <div class="stage-3d" style="height:150px">
+        <svg width="190" height="150" viewBox="0 0 190 150">
+          <!-- cube iso wireframe (white) -->
+          <g stroke="var(--wire)" stroke-width="0.7" fill="none">
+            <polygon points="45,52 125,52 125,128 45,128" fill="rgba(255,255,255,0.012)"/>
+            <polygon points="45,52 125,52 152,28 72,28" fill="rgba(255,255,255,0.02)"/>
+            <polygon points="125,52 152,28 152,104 125,128" fill="rgba(255,255,255,0.03)"/>
+          </g>
+          <!-- internal mesh grid (subtle) -->
+          <g stroke="var(--wire-dim)" stroke-width="0.4" fill="none" opacity="0.7">
+            <line x1="65" y1="52" x2="65" y2="128"/><line x1="85" y1="52" x2="85" y2="128"/><line x1="105" y1="52" x2="105" y2="128"/>
+            <line x1="45" y1="71" x2="125" y2="71"/><line x1="45" y1="90" x2="125" y2="90"/><line x1="45" y1="109" x2="125" y2="109"/>
+            <line x1="65" y1="52" x2="92" y2="28"/><line x1="85" y1="52" x2="112" y2="28"/><line x1="105" y1="52" x2="132" y2="28"/>
+            <line x1="125" y1="71" x2="152" y2="47"/><line x1="125" y1="90" x2="152" y2="66"/><line x1="125" y1="109" x2="152" y2="85"/>
+            <line x1="132" y1="52" x2="132" y2="128"/><line x1="139" y1="52" x2="139" y2="128"/><line x1="146" y1="52" x2="146" y2="128"/>
+          </g>
+          <!-- intersecting diagonal lines through core -->
+          <g stroke="var(--red)" stroke-width="0.45" opacity="0.6">
+            <line x1="45" y1="52" x2="152" y2="104"/><line x1="125" y1="52" x2="72" y2="128"/>
+          </g>
+          <!-- vertex dots -->
+          <g fill="#6a6a6a">
+            <circle cx="45" cy="52" r="1.5"/><circle cx="125" cy="52" r="1.5"/><circle cx="152" cy="28" r="1.5"/>
+            <circle cx="72" cy="28" r="1.3"/><circle cx="45" cy="128" r="1.3"/><circle cx="125" cy="128" r="1.5"/>
+            <circle cx="152" cy="104" r="1.5"/>
+          </g>
+          <!-- glowing red core -->
+          <circle cx="98" cy="78" r="16" fill="url(#memCore)" opacity="0.4"><animate attributeName="r" values="11;18;11" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="98" cy="78" r="3.5" fill="var(--red)"><animate attributeName="r" values="3;4.5;3" dur="1.6s" repeatCount="indefinite"/></circle>
+        </svg>
+      </div>
+
+      <div>
+      <div class="card tom-card"><div class="zh">心智推理（ToM）</div><div class="en">THEORY OF MIND</div></div>
+
+      <!-- ToM topographic mesh -->
+      <div class="stage-3d" style="height:96px;margin-bottom:6px">
+        <svg width="200" height="92" viewBox="0 0 200 92">
+          <g stroke="var(--wire)" stroke-width="0.5" fill="none" opacity="0.85">
+            <!-- elevation rows (perspective rings) -->
+            <path d="M22,24 Q60,12 100,22 T178,24"/>
+            <path d="M16,38 Q60,22 100,34 T184,38"/>
+            <path d="M10,54 Q60,34 100,48 T190,54"/>
+            <path d="M6,70  Q60,50 100,62 T194,70"/>
+          </g>
+          <g stroke="var(--wire-dim)" stroke-width="0.45" fill="none" opacity="0.8">
+            <!-- ridge columns -->
+            <path d="M30,24 Q33,48 37,72"/><path d="M58,18 Q61,44 65,72"/>
+            <path d="M86,18 Q89,42 93,72"/><path d="M114,18 Q117,44 121,72"/>
+            <path d="M142,20 Q145,46 149,72"/><path d="M170,24 Q173,48 177,74"/>
+          </g>
+          <!-- glowing peaks -->
+          <g fill="var(--red)">
+            <circle cx="100" cy="34" r="2.4"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/></circle>
+            <circle cx="65" cy="44" r="1.6"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.4s" repeatCount="indefinite"/></circle>
+            <circle cx="142" cy="46" r="1.6"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.2s" repeatCount="indefinite"/></circle>
+          </g>
+          <circle cx="100" cy="34" r="9" fill="url(#memCore)" opacity="0.3"><animate attributeName="r" values="6;12;6" dur="2.8s" repeatCount="indefinite"/></circle>
+        </svg>
+      </div>
+      </div>
+
+      <div>
+      <div class="col-title" style="font-size:12px">情绪理解</div>
+      <div class="col-sub" style="margin-bottom:4px">EMOTION UNDERSTANDING</div>
+
+      <!-- Concentric elliptical orbits (atomic model) -->
+      <div class="stage-3d" style="height:150px">
+        <svg width="200" height="150" viewBox="0 0 200 150">
+          <g stroke="var(--wire)" stroke-width="0.6" fill="none" opacity="0.85">
+            <ellipse cx="100" cy="75" rx="78" ry="24"/>
+            <ellipse cx="100" cy="75" rx="78" ry="24" transform="rotate(60 100 75)"/>
+            <ellipse cx="100" cy="75" rx="78" ry="24" transform="rotate(-60 100 75)"/>
+          </g>
+          <g stroke="var(--wire-dim)" stroke-width="0.4" fill="none" opacity="0.6">
+            <ellipse cx="100" cy="75" rx="48" ry="15"/>
+            <ellipse cx="100" cy="75" rx="48" ry="15" transform="rotate(60 100 75)"/>
+            <ellipse cx="100" cy="75" rx="48" ry="15" transform="rotate(-60 100 75)"/>
+          </g>
+          <!-- orbiting electrons -->
+          <circle r="2.4" fill="var(--red)" class="particle"><animateMotion dur="3.2s" repeatCount="indefinite" path="M22,75 a78,24 0 1,1 156,0 a78,24 0 1,1 -156,0"/></circle>
+          <circle r="2" fill="var(--red)" class="particle"><animateMotion dur="3.8s" begin="0.7s" repeatCount="indefinite" path="M100,75 m-78,0 a78,24 60 1,1 156,0 a78,24 60 1,1 -156,0"/></circle>
+          <circle r="1.7" fill="#fff" class="particle"><animateMotion dur="4.4s" begin="1.4s" repeatCount="indefinite" path="M100,75 m-78,0 a78,24 -60 1,1 156,0 a78,24 -60 1,1 -156,0"/></circle>
+          <!-- nucleus -->
+          <circle cx="100" cy="75" r="12" fill="url(#memCore)" opacity="0.5"><animate attributeName="r" values="8;14;8" dur="2.4s" repeatCount="indefinite"/></circle>
+          <circle cx="100" cy="75" r="3.5" fill="var(--red)"><animate attributeName="opacity" values="0.7;1;0.7" dur="1.6s" repeatCount="indefinite"/></circle>
+        </svg>
+      </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 04 DECISION ════ -->
+    <div class="col col-dec">
+      <div class="col-title">多维评估</div>
+      <div class="col-sub">MULTI-DIMENSIONAL EVALUATION</div>
+      <div class="col-body">
+
+      <div class="score-box">
+        <div class="score-row"><div class="score-lbl"><div class="zh">场景评分</div><div class="en">SCENE</div></div><div class="score-bar"><div class="score-fill" style="width:78%"></div></div><div class="score-val">0.78</div></div>
+        <div class="score-row"><div class="score-lbl"><div class="zh">情绪评分</div><div class="en">EMOTION</div></div><div class="score-bar"><div class="score-fill" style="width:71%"></div></div><div class="score-val">0.71</div></div>
+        <div class="score-row"><div class="score-lbl"><div class="zh">关系评分</div><div class="en">RELATION</div></div><div class="score-bar"><div class="score-fill" style="width:75%"></div></div><div class="score-val">0.75</div></div>
+        <div class="score-row"><div class="score-lbl"><div class="zh">风险评估</div><div class="en">RISK</div></div><div class="score-bar"><div class="score-fill blue" style="width:20%"></div></div><div class="score-val blue">0.20</div></div>
+      </div>
+
+      <div>
+        <div class="ws-h"><div class="zh">加权介入分数</div><span class="en">WEIGHTED SCORE</span></div>
+        <div class="stage-3d" style="height:92px">
+          <svg width="180" height="90" viewBox="0 0 180 90">
+            <defs>
+              <linearGradient id="funnelG" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#e8492f" stop-opacity="0.5"/><stop offset="100%" stop-color="#e8492f" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="var(--red)" stroke-width="0.55" fill="none" opacity="0.7">
+              <line x1="8" y1="2" x2="90" y2="74"/><line x1="28" y1="2" x2="90" y2="74"/><line x1="48" y1="2" x2="90" y2="74"/>
+              <line x1="68" y1="2" x2="90" y2="74"/><line x1="90" y1="2" x2="90" y2="74"/><line x1="112" y1="2" x2="90" y2="74"/>
+              <line x1="132" y1="2" x2="90" y2="74"/><line x1="152" y1="2" x2="90" y2="74"/><line x1="172" y1="2" x2="90" y2="74"/>
+            </g>
+            <polygon points="8,2 172,2 96,74 84,74" fill="url(#funnelG)" opacity="0.55"/>
+            <polygon points="38,16 142,16 95,66 85,66" fill="rgba(232,73,47,0.12)" stroke="var(--red)" stroke-width="0.4"/>
+            <circle cx="90" cy="76" r="3" fill="var(--red)"><animate attributeName="r" values="2.2;4;2.2" dur="1.6s" repeatCount="indefinite"/></circle>
+            <polygon points="85,80 95,80 90,90" fill="var(--red)"/>
+          </svg>
+        </div>
+        <div class="ws-value">0.74</div>
+      </div>
+
+      <div class="score-box" style="padding:9px 11px">
+        <div class="card-h" style="margin-bottom:6px"><div class="zh">决策输出</div><div class="en">DECISION OUTPUT</div></div>
+        <div class="dec-list">
+          <div class="dec-row on"><div class="chk on"></div><span>温和介入</span></div>
+          <div class="dec-row"><div class="chk"></div><span>询问授权</span></div>
+          <div class="dec-row"><div class="chk"></div><span>不打扰播放</span></div>
+          <div class="dec-row"><div class="chk"></div><span>情境营造</span></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 05 DISPATCH ════ -->
+    <div class="col col-disp">
+      <div class="col-title">任务调度</div>
+      <div class="col-sub">TASK SCHEDULING</div>
+      <div class="col-body">
+
+      <div class="card" style="padding:10px">
+        <div class="gantt-axis"><span>00:05</span><span>00:30</span><span>00:55</span><span>24:25</span></div>
+        <div class="gantt-row"><div class="gantt-lbl">T1</div><div class="gantt-track"><div class="gantt-bar" style="left:0%;width:34%;background:linear-gradient(90deg,#8a2c20,#e8492f)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-lbl">T2</div><div class="gantt-track"><div class="gantt-bar" style="left:12%;width:50%;background:linear-gradient(90deg,#b8392b,#e8492f)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-lbl">T3</div><div class="gantt-track"><div class="gantt-bar" style="left:30%;width:38%;background:linear-gradient(90deg,#6e2218,#b8392b)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-lbl">T4</div><div class="gantt-track"><div class="gantt-bar" style="left:55%;width:36%;background:linear-gradient(90deg,#b8392b,#e8492f)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-lbl">T5</div><div class="gantt-track"><div class="gantt-bar" style="left:20%;width:72%;background:linear-gradient(90deg,#8a2c20,#b8392b)"></div></div></div>
+      </div>
+
+      <div>
+        <div class="col-title" style="font-size:12px">资源调度网络</div>
+        <div class="col-sub" style="margin-bottom:4px">RESOURCE NETWORK</div>
+        <div class="stage-3d" style="height:138px">
+          <svg width="214" height="138" viewBox="0 0 214 138">
+            <!-- dashed orbit rings -->
+            <g stroke="var(--wire-dim)" stroke-width="0.5" fill="none" opacity="0.7" stroke-dasharray="2,4">
+              <ellipse cx="107" cy="69" rx="82" ry="48"/>
+              <ellipse cx="107" cy="69" rx="52" ry="30"/>
+            </g>
+            <!-- spokes from hub to satellites -->
+            <g stroke="var(--wire)" stroke-width="0.6" opacity="0.7">
+              <line x1="107" y1="69" x2="189" y2="69"/>
+              <line x1="107" y1="69" x2="148" y2="27"/>
+              <line x1="107" y1="69" x2="66" y2="27"/>
+              <line x1="107" y1="69" x2="25" y2="69"/>
+              <line x1="107" y1="69" x2="66" y2="111"/>
+              <line x1="107" y1="69" x2="148" y2="111"/>
+            </g>
+            <!-- active spokes (red) -->
+            <g stroke="#e8492f" stroke-width="0.8" opacity="0.75">
+              <line x1="107" y1="69" x2="148" y2="27"/>
+              <line x1="107" y1="69" x2="66" y2="111"/>
+            </g>
+            <!-- satellite nodes -->
+            <g fill="#0a0a0a" stroke="#5a5a5a" stroke-width="1">
+              <circle cx="189" cy="69" r="5"/><circle cx="148" cy="27" r="5"/><circle cx="66" cy="27" r="5"/>
+              <circle cx="25" cy="69" r="5"/><circle cx="66" cy="111" r="5"/><circle cx="148" cy="111" r="5"/>
+            </g>
+            <g fill="#e8492f">
+              <circle cx="148" cy="27" r="2"><animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/></circle>
+              <circle cx="66" cy="111" r="2"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/></circle>
+            </g>
+            <!-- central hub -->
+            <circle cx="107" cy="69" r="16" fill="url(#memCore)" opacity="0.35"><animate attributeName="r" values="12;19;12" dur="2.6s" repeatCount="indefinite"/></circle>
+            <circle cx="107" cy="69" r="8" fill="#0a0a0a" stroke="#e8492f" stroke-width="1.2"/>
+            <circle cx="107" cy="69" r="3.5" fill="#e8492f"><animate attributeName="r" values="3;4.5;3" dur="1.6s" repeatCount="indefinite"/></circle>
+            <!-- orbiting particle -->
+            <circle r="1.8" fill="#fff" class="particle"><animateMotion dur="5s" repeatCount="indefinite" path="M25,69 a82,48 0 1,1 164,0 a82,48 0 1,1 -164,0"/></circle>
+          </svg>
+        </div>
+        <div class="res-bar-row"><span style="width:26px">20%</span><div class="res-bar-bg"><div class="res-bar-fill" style="width:20%"></div></div></div>
+      </div>
+
+      <div>
+        <div class="col-title" style="font-size:12px">冲突检测</div>
+        <div class="col-sub" style="margin-bottom:4px">CONFLICT DETECTION</div>
+        <div class="stage-3d" style="height:84px">
+          <svg width="180" height="84" viewBox="0 0 180 84">
+            <defs>
+              <radialGradient id="vGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8492f" stop-opacity="0.5"/><stop offset="100%" stop-color="#e8492f" stop-opacity="0"/></radialGradient>
+              <clipPath id="cL"><circle cx="68" cy="32" r="24"/></clipPath>
+              <clipPath id="cR"><circle cx="112" cy="32" r="24"/></clipPath>
+            </defs>
+            <!-- three overlapping circles -->
+            <circle cx="68" cy="32" r="24" fill="rgba(184,57,43,0.05)" stroke="#9a3326" stroke-width="0.8"/>
+            <circle cx="112" cy="32" r="24" fill="rgba(184,57,43,0.05)" stroke="#9a3326" stroke-width="0.8"/>
+            <circle cx="90" cy="54" r="24" fill="rgba(184,57,43,0.05)" stroke="#9a3326" stroke-width="0.8"/>
+            <!-- pairwise intersection glows -->
+            <g clip-path="url(#cL)"><circle cx="112" cy="32" r="24" fill="url(#vGlow)"/></g>
+            <g clip-path="url(#cL)"><circle cx="90" cy="54" r="24" fill="url(#vGlow)"/></g>
+            <g clip-path="url(#cR)"><circle cx="90" cy="54" r="24" fill="url(#vGlow)"/></g>
+            <!-- center conflict marker -->
+            <circle cx="90" cy="40" r="3.2" fill="var(--red)"><animate attributeName="opacity" values="0.6;1;0.6" dur="1.6s" repeatCount="indefinite"/></circle>
+            <circle cx="90" cy="40" r="9" fill="var(--red)" opacity="0.16"><animate attributeName="r" values="6;12;6" dur="2.4s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ════ 06 EXECUTION ════ -->
+    <div class="col col-exec">
+      <div class="col-title">设备执行</div>
+      <div class="col-sub">DEVICE EXECUTION</div>
+      <div class="col-body">
+      <div class="exec-list">
+        <div class="exec-item">
+          <div class="exec-icon"><svg viewBox="0 0 24 24"><path d="M11 4v16l-5-5H3v-6h3l5-5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div>
+          <div class="exec-body"><div class="name">蓝牙音箱</div><div class="act">播放怀旧录音</div><div class="p-wave" data-exec style="margin-top:6px;height:14px"></div></div>
+          <div class="exec-meta">23:47</div>
+        </div>
+        <div class="exec-item">
+          <div class="exec-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21.5h4M12 2.5a6.5 6.5 0 0 1 4 11.7c-.7.6-1 1.5-1 2.4V18H9v-1.4c0-.9-.3-1.8-1-2.4A6.5 6.5 0 0 1 12 2.5z"/></svg></div>
+          <div class="exec-body"><div class="name">智能灯光</div><div class="act">调暗至 20%</div><div class="exec-progress"><div class="fill" style="width:20%;background:linear-gradient(90deg,#9a6010,#e0a838)"></div></div></div>
+          <div class="exec-meta warm">20%</div>
+        </div>
+        <div class="exec-item">
+          <div class="exec-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="21" y2="3"/><path d="M6 3v18M18 3v18M10 3v18M14 3v18"/><path d="M8 3l2 4M12 3l-2 4M14 3l-2 4M18 3l-2 4"/></svg></div>
+          <div class="exec-body"><div class="name">智能窗帘</div><div class="act">开启</div><div class="exec-progress"><div class="fill" style="width:80%;background:linear-gradient(90deg,#555,#aaa)"></div></div></div>
+          <div class="exec-meta">80%</div>
+        </div>
+        <div class="exec-item">
+          <div class="exec-icon"><svg viewBox="0 0 24 24"><path d="M7 7h10v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7z"/><path d="M9 7V4h6v3"/><path d="M12 11v5M9.5 13.5h5"/></svg></div>
+          <div class="exec-body"><div class="name">电热水壶</div><div class="act">启动烧水</div><div class="exec-progress"><div class="fill" style="width:66%;background:linear-gradient(90deg,var(--red-d),var(--red))"></div></div></div>
+          <div class="exec-meta hot">80°C</div>
+        </div>
+        <div class="exec-item">
+          <div class="exec-icon"><svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"/></svg></div>
+          <div class="exec-body"><div class="name">语音输出</div><div class="act">温柔回应</div><div class="p-wave" data-exec style="margin-top:6px;height:14px"></div></div>
+          <div class="exec-meta">23:48</div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div><!-- end grid -->
+
+  <!-- ════ BOTTOM ════ -->
+  <div class="bot-wrap">
+    <svg class="bot-overlay" viewBox="0 0 1652 170" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="fbWave" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#6e2218" stop-opacity="0"/><stop offset="18%" stop-color="#e8492f" stop-opacity="0.75"/>
+          <stop offset="82%" stop-color="#b8392b" stop-opacity="0.7"/><stop offset="100%" stop-color="#6e2218" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- into external knowledge -->
+      <g stroke="#5a5a5a" stroke-width="0.55" fill="none" opacity="0.5" stroke-dasharray="3,4">
+        <path d="M260,0 C 320,30 370,52 440,84"/><path d="M430,0 C 438,30 438,55 440,84"/><path d="M630,0 C 560,30 490,58 446,84"/>
+      </g>
+      <!-- feedback wave -->
+      <path id="fbPath" d="M690,86 Q752,44 814,86 T 938,86 T 1062,86 T 1186,86 T 1310,86 T 1434,86 T 1558,86 T 1652,86" stroke="url(#fbWave)" stroke-width="1.3" fill="none"/>
+      <path d="M690,86 Q752,56 814,86 T 938,86 T 1062,86 T 1186,86 T 1310,86 T 1434,86 T 1558,86 T 1652,86" stroke="#6e2218" stroke-width="0.7" fill="none" opacity="0.45"/>
+      <circle r="2.4" fill="#fff" class="particle"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#fbPath"/></animateMotion></circle>
+      <circle r="2" fill="var(--red)" class="particle"><animateMotion dur="5s" begin="1.6s" repeatCount="indefinite"><mpath href="#fbPath"/></animateMotion></circle>
+      <circle r="1.5" fill="var(--red)" class="particle"><animateMotion dur="5s" begin="3.2s" repeatCount="indefinite"><mpath href="#fbPath"/></animateMotion></circle>
+      <!-- feedback loop up arrow -->
+      <path d="M1652,86 C 1652,44 1632,22 1592,12" stroke="var(--red)" stroke-width="0.6" stroke-dasharray="4,3" fill="none" opacity="0.5"/>
+      <polygon points="1594,17 1588,6 1584,14" fill="var(--red)" opacity="0.7"/>
+      <g fill="var(--red)">
+        <circle cx="794" cy="64" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="916" cy="106" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.4s" repeatCount="indefinite"/></circle>
+        <circle cx="1100" cy="66" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/></circle>
+        <circle cx="1248" cy="104" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.6s" repeatCount="indefinite"/></circle>
+        <circle cx="1372" cy="64" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"/></circle>
+        <circle cx="1496" cy="106" r="1.2"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.8s" repeatCount="indefinite"/></circle>
+      </g>
+    </svg>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-row"><div class="lg-line d"></div><div class="lg-tx"><span class="zh">数据流</span><span class="en">DATA FLOW</span></div></div>
+      <div class="legend-row"><div class="lg-line c"></div><div class="lg-tx"><span class="zh">控制流</span><span class="en">CONTROL FLOW</span></div></div>
+      <div class="legend-row"><div class="lg-line m"></div><div class="lg-tx"><span class="zh">记忆调用</span><span class="en">MEMORY ACCESS</span></div></div>
+      <div class="legend-row"><div class="lg-line f"></div><div class="lg-tx"><span class="zh">反馈流</span><span class="en">FEEDBACK LOOP</span></div></div>
+    </div>
+
+    <!-- EXTERNAL KNOWLEDGE -->
+    <div class="ext-knowledge">
+      <svg width="100%" height="138" viewBox="0 0 380 138" preserveAspectRatio="xMidYMid meet">
+        <defs><linearGradient id="cyl1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#202020"/><stop offset="100%" stop-color="#0a0a0a"/></linearGradient></defs>
+        <g stroke="#3a3a3a" stroke-width="0.5" fill="none" opacity="0.45">
+          <ellipse cx="190" cy="72" rx="172" ry="34"/>
+          <ellipse cx="190" cy="72" rx="130" ry="24" transform="rotate(16 190 72)"/>
+          <ellipse cx="190" cy="72" rx="100" ry="40" transform="rotate(-12 190 72)"/>
+        </g>
+        <!-- main center cylinder -->
+        <g transform="translate(152 30)">
+          <ellipse cx="38" cy="8" rx="32" ry="6" fill="#1c1c1c" stroke="var(--red)" stroke-width="0.8"/>
+          <path d="M6,8 V66 a32,6 0 0 0 64,0 V8" fill="url(#cyl1)" stroke="#2a2a2a" stroke-width="0.6"/>
+          <line x1="6" y1="22" x2="70" y2="22" stroke="#262626" stroke-width="0.4"/>
+          <line x1="6" y1="37" x2="70" y2="37" stroke="#262626" stroke-width="0.4"/>
+          <line x1="6" y1="52" x2="70" y2="52" stroke="#262626" stroke-width="0.4"/>
+          <ellipse cx="38" cy="8" rx="27" ry="4" fill="rgba(232,73,47,0.28)"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/></ellipse>
+        </g>
+        <!-- left small -->
+        <g transform="translate(54 50)" opacity="0.7">
+          <ellipse cx="22" cy="5" rx="20" ry="4" fill="#1a1a1a" stroke="#6e2218" stroke-width="0.6"/>
+          <path d="M2,5 V44 a20,4 0 0 0 40,0 V5" fill="#0c0c0c" stroke="#2a2a2a" stroke-width="0.5"/>
+          <line x1="2" y1="19" x2="42" y2="19" stroke="#1e1e1e" stroke-width="0.4"/><line x1="2" y1="31" x2="42" y2="31" stroke="#1e1e1e" stroke-width="0.4"/>
+        </g>
+        <!-- right small -->
+        <g transform="translate(286 50)" opacity="0.7">
+          <ellipse cx="22" cy="5" rx="20" ry="4" fill="#1a1a1a" stroke="#6e2218" stroke-width="0.6"/>
+          <path d="M2,5 V44 a20,4 0 0 0 40,0 V5" fill="#0c0c0c" stroke="#2a2a2a" stroke-width="0.5"/>
+          <line x1="2" y1="19" x2="42" y2="19" stroke="#1e1e1e" stroke-width="0.4"/><line x1="2" y1="31" x2="42" y2="31" stroke="#1e1e1e" stroke-width="0.4"/>
+        </g>
+        <g stroke="var(--red)" stroke-width="0.6" fill="none" opacity="0.55" stroke-dasharray="3,3">
+          <path d="M96,72 Q124,66 152,66"/><path d="M222,66 Q258,66 286,72"/>
+        </g>
+        <circle r="1.5" fill="var(--red)"><animateMotion dur="9s" repeatCount="indefinite" path="M18,72 a172,34 0 1,1 0.1,0"/></circle>
+      </svg>
+      <div class="ek-label"><div class="zh">外部知识与资源</div><span class="en">EXTERNAL KNOWLEDGE</span></div>
+    </div>
+
+    <!-- FEEDBACK LEARNING -->
+    <div class="feedback">
+      <div class="feedback-h"><div class="zh">反馈学习</div><span class="en">FEEDBACK LEARNING</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// build symmetric waveform bars dynamically for crisp, dense look
+function buildWave(el, count, max, dense){
+  let h='';
+  for(let i=0;i<count;i++){
+    const hgt = Math.max(2, Math.round((Math.sin(i*0.9)*0.5+0.5)*max) + (i%3));
+    const w = dense ? 1.5 : 2;
+    h += '<div class="b" style="height:'+hgt+'px;animation-delay:'+((i%7)*0.07)+'s"></div>';
+  }
+  el.innerHTML=h;
+}
+document.querySelectorAll('#uwave').forEach(e=>buildWave(e,30,15,false));
+document.querySelectorAll('[data-mini]').forEach(e=>buildWave(e,8,12,true));
+document.querySelectorAll('[data-exec]').forEach(e=>buildWave(e,22,12,true));
+</script>
+
+</body>
+</html>

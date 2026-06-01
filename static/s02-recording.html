@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S02 老伴的录音｜16:9 Thought Projection</title>
+  <link rel="stylesheet" href="./s02-recording.css" />
+</head>
+<body>
+  <canvas id="s02Canvas"></canvas>
+
+  <main class="screen-wrap">
+    <section class="projection-screen" id="projectionScreen" aria-label="S02 老伴的录音思考过程动画">
+      <section class="projection-world reasoning-chain-world" id="projectionWorld">
+        <div class="chain-background" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="stream-rail main-rail" aria-hidden="true">
+          <i class="rail-light"></i>
+          <i class="rail-packet rp1"></i>
+          <i class="rail-packet rp2"></i>
+          <i class="rail-packet rp3"></i>
+        </div>
+        <svg class="flow-schema" viewBox="0 0 1600 720" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <marker id="chainArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z"></path>
+            </marker>
+          </defs>
+          <path class="schema-main" d="M 132 392 H 1490"></path>
+          <path class="schema-branch" d="M 222 392 V 312 H 462 V 392"></path>
+          <path class="schema-branch" d="M 462 392 V 312 H 701 V 392"></path>
+          <path class="schema-branch" d="M 701 392 V 312 H 940 V 392"></path>
+          <path class="schema-branch" d="M 940 392 V 312 H 1178 V 392"></path>
+          <path class="schema-branch" d="M 1178 392 V 312 H 1368 V 392"></path>
+          <path class="schema-thread t-a" d="M 132 392 H 222 C 246 392 254 392 278 392 H 462 C 486 392 494 392 518 392 H 701 C 725 392 733 392 757 392 H 940 C 964 392 972 392 996 392 H 1178 C 1202 392 1210 392 1234 392 H 1490"></path>
+          <path class="schema-thread t-b" d="M 140 312 H 222 C 246 312 254 332 278 332 H 414 C 438 332 438 312 462 312 H 701 C 725 312 733 332 757 332 H 892 C 916 332 916 312 940 312 H 1178 C 1202 312 1210 332 1234 332 H 1468"></path>
+          <path class="schema-thread t-c" d="M 140 472 H 222 C 246 472 254 452 278 452 H 414 C 438 452 438 472 462 472 H 701 C 725 472 733 452 757 452 H 892 C 916 452 916 472 940 472 H 1178 C 1202 472 1210 452 1234 452 H 1468"></path>
+          <path class="schema-fork" d="M 222 392 V 312"></path>
+          <path class="schema-fork" d="M 462 392 V 312"></path>
+          <path class="schema-fork" d="M 701 392 V 312"></path>
+          <path class="schema-fork" d="M 940 392 V 312"></path>
+          <path class="schema-fork" d="M 1178 392 V 312"></path>
+          <path class="schema-arc arc-a" d="M 222 392 C 312 232 612 232 701 392"></path>
+          <path class="schema-arc arc-b" d="M 462 392 C 552 252 850 252 940 392"></path>
+          <path class="schema-arc arc-c" d="M 701 392 C 788 532 1092 532 1178 392"></path>
+          <path class="schema-arc arc-d" d="M 940 392 C 1012 248 1294 248 1368 392"></path>
+          <g class="schema-packets">
+            <circle r="4"><animateMotion dur="7.2s" repeatCount="indefinite" path="M 132 392 H 222 C 246 392 254 392 278 392 H 462 C 486 392 494 392 518 392 H 701 C 725 392 733 392 757 392 H 940 C 964 392 972 392 996 392 H 1178 C 1202 392 1210 392 1234 392 H 1490" /></circle>
+            <circle r="3"><animateMotion dur="6.4s" begin=".8s" repeatCount="indefinite" path="M 140 312 H 222 C 246 312 254 332 278 332 H 414 C 438 332 438 312 462 312 H 701 C 725 312 733 332 757 332 H 892 C 916 332 916 312 940 312 H 1178 C 1202 312 1210 332 1234 332 H 1468" /></circle>
+            <circle r="3.5"><animateMotion dur="8.4s" begin="1.3s" repeatCount="indefinite" path="M 140 472 H 222 C 246 472 254 452 278 452 H 414 C 438 452 438 472 462 472 H 701 C 725 472 733 452 757 452 H 892 C 916 452 916 472 940 472 H 1178 C 1202 472 1210 452 1234 452 H 1468" /></circle>
+          </g>
+          <g class="schema-steps">
+            <text class="schema-step s1" x="222" y="382"><tspan>01</tspan> 信号捕捉</text>
+            <text class="schema-step s2" x="462" y="382"><tspan>02</tspan> 记忆命中</text>
+            <text class="schema-step s3" x="701" y="382"><tspan>03</tspan> 意图改写</text>
+            <text class="schema-step s4" x="940" y="382"><tspan>04</tspan> 分寸判断</text>
+            <text class="schema-step s5" x="1178" y="382"><tspan>05</tspan> 授权行动</text>
+            <text class="schema-step s6" x="1368" y="382"><tspan>06</tspan> 执行输出</text>
+          </g>
+          <circle class="schema-dot d1" cx="222" cy="392" r="5"></circle>
+          <circle class="schema-dot d2" cx="462" cy="392" r="5"></circle>
+          <circle class="schema-dot d3" cx="701" cy="392" r="5"></circle>
+          <circle class="schema-dot d4" cx="940" cy="392" r="5"></circle>
+          <circle class="schema-dot d5" cx="1178" cy="392" r="5"></circle>
+          <circle class="schema-dot d6" cx="1368" cy="392" r="5"></circle>
+        </svg>
+
+        <header class="chain-title">
+          <span>DIGITAL CHAIN OF THOUGHT / S02</span>
+          <h1>从深夜独白推理出一次温柔介入</h1>
+          <p>用户说出纪念日与失眠，系统依次完成感知、记忆、认知、决策、调度与执行推理。</p>
+        </header>
+
+        <aside class="source-console">
+          <span class="console-tag">USER INPUT</span>
+          <strong>深夜独白</strong>
+          <ul>
+            <li><b>原话</b> 今天是个特别的日子……1985 年的今天，我和老伴儿认识的。</li>
+            <li><b>补充</b> 我有点睡不着。</li>
+          </ul>
+        </aside>
+
+        <article class="projection-layer chain-node node-sense active" data-layer="0">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">01 / SENSE</div>
+            <h2>感知层</h2>
+            <div class="modality-rack">
+              <span class="mod voice"><i></i><b>语音</b></span>
+              <span class="mod text"><i></i><b>文本</b></span>
+              <span class="mod image"><i></i><b>图像</b></span>
+              <span class="mod bio"><i></i><b>生理</b></span>
+            </div>
+            <div class="analysis-grid concept-board sense-analysis">
+              <div class="analysis-visual">
+                <i class="concept-icon audio-wave"></i>
+                <i class="concept-icon text-lines"></i>
+                <i class="concept-icon image-stack"></i>
+                <i class="concept-icon bio-line"></i>
+              </div>
+              <dl class="analysis-copy analysis-steps">
+                <div><dt>捕捉</dt><dd>低声轻颤、语速放慢、深夜独坐。</dd></div>
+                <div><dt>命中</dt><dd>“特别日子”“1985”“老伴儿”触发纪念日语义。</dd></div>
+                <div><dt>判断</dt><dd>不是普通失眠，是高情感浓度场景。</dd></div>
+              </dl>
+            </div>
+            <div class="token-cloud">
+              <span>38dB</span><span>0.7x</span><span>老伴儿</span><span>1985</span><span>12 lux</span><span>独自</span>
+            </div>
+            <div class="node-core sense-core" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：这不是普通失眠，而是深夜、独处、纪念日共同触发的高情感浓度场景。</footer>
+          </div>
+        </article>
+
+        <article class="projection-layer chain-node node-memory" data-layer="1">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">02 / MEMORY</div>
+            <h2>记忆层</h2>
+            <div class="modality-rack">
+              <span class="mod memory"><i></i><b>人格库</b></span>
+              <span class="mod context"><i></i><b>日期</b></span>
+              <span class="mod audio"><i></i><b>录音库</b></span>
+              <span class="mod pref"><i></i><b>偏好</b></span>
+            </div>
+            <div class="analysis-grid concept-board retrieval-analysis">
+              <div class="analysis-visual">
+                <div class="memory-cubes" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="search-beam" aria-hidden="true"></div>
+              </div>
+              <dl class="analysis-copy analysis-steps memory-hit">
+                <div><dt>关系</dt><dd>陈兰：核心亲密关系，已沉淀在人格记忆库。</dd></div>
+                <div><dt>时间</dt><dd>1985 相识日期与当前日期匹配。</dd></div>
+                <div><dt>素材</dt><dd>可用 12 段授权录音，但不能默认播放。</dd></div>
+              </dl>
+            </div>
+            <div class="memory-grid" aria-hidden="true">
+              <span></span><span class="hit"></span><span></span><span></span><span class="hit"></span><span></span><span></span><span class="hit"></span><span></span>
+            </div>
+            <div class="evidence-list">
+              <span>陈兰 / 核心亲密关系</span>
+              <span>1985-11-12 相识命中</span>
+              <span>授权录音 12 段</span>
+            </div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：可调用的是“授权范围内的记忆入口”，但用户偏好是不被强行打开记忆。</footer>
+          </div>
+        </article>
+
+        <article class="projection-layer chain-node node-cognition" data-layer="2">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">03 / REWRITE</div>
+            <h2>认知层</h2>
+            <div class="modality-rack">
+              <span class="mod surface"><i></i><b>表层</b></span>
+              <span class="mod hidden"><i></i><b>深层</b></span>
+              <span class="mod tom"><i></i><b>ToM</b></span>
+              <span class="mod limit"><i></i><b>边界</b></span>
+            </div>
+            <div class="analysis-grid concept-board cognition-analysis">
+              <div class="analysis-visual">
+                <div class="intent-map" aria-hidden="true">
+                  <i class="surface-node"></i>
+                  <i class="hidden-node"></i>
+                  <i class="boundary-ring"></i>
+                </div>
+              </div>
+              <dl class="analysis-copy analysis-steps">
+                <div><dt>表层</dt><dd>用户说“睡不着”，像是在描述失眠。</dd></div>
+                <div><dt>深层</dt><dd>真正需求是被陪伴、被见证、被温柔回应。</dd></div>
+                <div><dt>边界</dt><dd>不能直接翻开回忆，要先给选择权。</dd></div>
+              </dl>
+            </div>
+            <div class="rewrite-stack">
+              <span>Surface: 失眠倾诉</span>
+              <i></i>
+              <span>Hidden: 陪伴与见证</span>
+              <i></i>
+              <strong>Boundary: 不强行打开记忆</strong>
+            </div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：他在等待一个温柔入口，而不是等待劝慰、打断或直接播放回忆。</footer>
+          </div>
+        </article>
+
+        <article class="projection-layer chain-node node-decision" data-layer="3">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">04 / DECISION</div>
+            <h2>决策层</h2>
+            <div class="modality-rack">
+              <span class="mod score"><i></i><b>场景</b></span>
+              <span class="mod score"><i></i><b>情绪</b></span>
+              <span class="mod score"><i></i><b>关系</b></span>
+              <span class="mod gate"><i></i><b>阈值</b></span>
+            </div>
+            <div class="analysis-grid concept-board decision-analysis">
+              <div class="analysis-visual">
+                <div class="score-chart" aria-hidden="true">
+                  <i style="--w:78%"><b>场景</b><em>0.78</em></i>
+                  <i style="--w:71%"><b>情绪</b><em>0.71</em></i>
+                  <i style="--w:75%"><b>关系</b><em>0.75</em></i>
+                </div>
+              </div>
+              <dl class="analysis-copy analysis-steps">
+                <div><dt>评分</dt><dd>场景 0.78、情绪 0.71、关系 0.75。</dd></div>
+                <div><dt>阈值</dt><dd>综合 0.74，高于介入阈值 0.50。</dd></div>
+                <div><dt>策略</dt><dd>允许温和介入，但必须先询问授权。</dd></div>
+              </dl>
+            </div>
+            <div class="score-bars">
+              <span style="--w:78%"><b>SCENE</b><i></i><em>0.78</em></span>
+              <span style="--w:71%"><b>EMOTION</b><i></i><em>0.71</em></span>
+              <span style="--w:75%"><b>RELATION</b><i></i><em>0.75</em></span>
+            </div>
+            <div class="threshold-chip">0.74 &gt; threshold 0.50</div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：加权介入分数 0.74，高于 0.50 阈值；允许温和介入，但必须先询问授权。</footer>
+          </div>
+        </article>
+
+        <article class="projection-layer chain-node node-action" data-layer="4">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">05 / ACTION</div>
+            <h2>调度层</h2>
+            <div class="modality-rack">
+              <span class="mod voice"><i></i><b>回应</b></span>
+              <span class="mod gate"><i></i><b>授权</b></span>
+              <span class="mod device"><i></i><b>设备</b></span>
+              <span class="mod memory"><i></i><b>写回</b></span>
+            </div>
+            <div class="analysis-grid concept-board task-analysis">
+              <div class="analysis-visual">
+                <div class="task-flow" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+              <dl class="analysis-copy analysis-steps">
+                <div><dt>回应</dt><dd>先确认共同记忆：“我也记得这个日子”。</dd></div>
+                <div><dt>授权</dt><dd>询问是否播放短录音，明确可拒绝。</dd></div>
+                <div><dt>写回</dt><dd>记录该场景的重要度与用户偏好。</dd></div>
+              </dl>
+            </div>
+            <div class="action-map">
+              <span>确认记忆</span><i></i><span>询问授权</span><i></i><span>短录音</span><i></i><span>暖光</span><i></i><strong>写回 ★★★</strong>
+            </div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：行动链必须可拒绝、可暂停、低刺激，并写入情景记忆，重要度标记为 ★★★。</footer>
+          </div>
+        </article>
+
+        <article class="projection-layer chain-node node-execution" data-layer="5">
+          <div class="layer-plane chain-card">
+            <div class="layer-code">06 / EXECUTION</div>
+            <h2>执行层</h2>
+            <div class="modality-rack">
+              <span class="mod speaker"><i></i><b>音箱</b></span>
+              <span class="mod light"><i></i><b>灯光</b></span>
+              <span class="mod curtain"><i></i><b>窗帘</b></span>
+              <span class="mod kettle"><i></i><b>水壶</b></span>
+            </div>
+            <div class="analysis-grid concept-board execution-analysis">
+              <div class="analysis-visual">
+                <i class="exec-icon speaker"><b></b></i>
+                <i class="exec-icon light"><b></b></i>
+                <i class="exec-icon curtain"><b></b></i>
+                <i class="exec-icon kettle"><b></b></i>
+              </div>
+              <dl class="analysis-copy analysis-steps">
+                <div><dt>先说</dt><dd>输出低刺激、可拒绝的陪伴式回应。</dd></div>
+                <div><dt>等待</dt><dd>用户同意后，才调度音箱与设备联动。</dd></div>
+                <div><dt>收束</dt><dd>不擅自播放录音，执行后写回记忆。</dd></div>
+              </dl>
+            </div>
+            <div class="action-map">
+              <span>语音输出</span><i></i><span>等待回应</span><i></i><span>授权判断</span><i></i><span>设备联动</span><i></i><strong>记忆写回</strong>
+            </div>
+            <div class="data-flow-lane" aria-hidden="true">
+              <i></i><span></span><span></span><span></span><span></span><b></b><b></b><b></b>
+            </div>
+            <footer>结论：按授权链路推进，不擅自播放录音；用户同意后才进入设备联动。</footer>
+          </div>
+        </article>
+
+        <section class="output-console">
+          <span class="console-tag">FINAL RESPONSE</span>
+          <p>我也记得这个日子。要不要听一小段阿姨当年说的话？如果不想听，我就陪你坐一会儿。</p>
+        </section>
+
+        <div class="token-stream" aria-hidden="true">
+          <span>INPUT</span><span>MODAL PARSE</span><span>CONTEXT EXTRACT</span><span>MEMORY RETRIEVE</span><span>INTENT REWRITE</span><span>DECISION GATE</span><span>AUTH CHAIN</span><span>EXECUTE + WRITEBACK</span>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <script src="./s02-recording.js"></script>
+</body>
+</html>

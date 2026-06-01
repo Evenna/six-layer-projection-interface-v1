@@ -79,6 +79,21 @@ async def mind_exhibit_js():
     return FileResponse(STATIC / "mind-exhibit.js")
 
 
+@app.get("/s02")
+async def s02_recording():
+    return FileResponse(STATIC / "s02-recording.html")
+
+
+@app.get("/s02-recording.css")
+async def s02_recording_css():
+    return FileResponse(STATIC / "s02-recording.css")
+
+
+@app.get("/s02-recording.js")
+async def s02_recording_js():
+    return FileResponse(STATIC / "s02-recording.js")
+
+
 # ─── 核心组件 ────────────────────────────────────────────────────────────────
 
 companion_memory = CompanionMemory()

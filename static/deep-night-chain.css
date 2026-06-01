@@ -1,0 +1,949 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.vector-shell {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.editable-chain {
+  width: min(100vw, calc(100vh * 1672 / 941));
+  height: min(100vh, calc(100vw * 941 / 1672));
+  display: block;
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  text-rendering: geometricPrecision;
+}
+
+.grid-line,
+.fine-grid-line {
+  fill: none;
+  stroke: rgba(150, 170, 200, 0.07);
+  stroke-width: 1;
+}
+
+.fine-grid-line {
+  stroke: rgba(150, 170, 200, 0.04);
+}
+
+.ambient { opacity: 0.16; filter: blur(20px); }
+.ambient-blue { fill: #29415a; }
+.ambient-red { fill: #592018; }
+
+.global-lines path,
+.flow,
+.feedback,
+.micro {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.flow.red {
+  stroke: rgba(240, 74, 59, 0.28);
+  stroke-width: 0.58;
+  opacity: 0.42;
+  filter: none;
+}
+
+.flow.dim {
+  stroke: rgba(175, 194, 220, 0.16);
+  stroke-width: 0.62;
+  opacity: 0.62;
+}
+
+.flow.dim.key {
+  stroke: rgba(190, 205, 225, 0.18);
+  stroke-width: 0.64;
+  opacity: 0.7;
+}
+
+.feedback {
+  stroke: rgba(175, 194, 220, 0.14);
+  stroke-width: 0.58;
+  stroke-dasharray: 4 6;
+}
+
+.micro {
+  stroke: rgba(175, 194, 220, 0.085);
+  stroke-width: 0.48;
+}
+
+.nav-rule,
+.legend-line,
+.meter,
+.cylinder {
+  stroke: rgba(175, 194, 220, 0.22);
+  stroke-width: 1;
+  fill: none;
+}
+
+.legend-line.red,
+.meter.red,
+.chart-line.red {
+  stroke: rgba(240, 74, 59, 0.72);
+  filter: url(#redGlow);
+}
+
+.legend-line.dash { stroke-dasharray: 4 5; }
+
+.red-dot {
+  fill: #f04a3b;
+  filter: url(#redGlow);
+  opacity: 0.82;
+}
+
+.red-dot.big { r: 4; }
+.white-dot { fill: rgba(235, 242, 250, 0.9); filter: url(#softGlow); }
+
+.top-num,
+.top-cn,
+.section-title,
+.node-title,
+.eval-label {
+  fill: rgba(225, 233, 244, 0.82);
+}
+
+.top-num,
+.top-en,
+.section-sub,
+.node-en,
+.tiny,
+.tiny-en,
+.score,
+.eval-en,
+.node-detail {
+  font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+}
+
+.top-num { font-size: 12px; fill: rgba(180, 196, 216, 0.58); }
+.top-cn { font-size: 11px; letter-spacing: 0.8px; }
+.top-en { font-size: 7px; fill: rgba(120, 136, 158, 0.52); letter-spacing: 0.45px; }
+.section-title { font-size: 11px; letter-spacing: 0.8px; }
+.section-sub { font-size: 7px; fill: rgba(120, 136, 158, 0.55); letter-spacing: 0.35px; }
+.section-title.center,
+.section-sub.center { text-anchor: middle; }
+
+.panel,
+.photo-box,
+.chart-frame {
+  fill: rgba(3, 9, 15, 0.46);
+  stroke: rgba(175, 194, 220, 0.12);
+  stroke-width: 1;
+}
+
+.quote {
+  font-size: 9px;
+  fill: rgba(234, 241, 250, 0.86);
+}
+
+.tiny { font-size: 8px; fill: rgba(165, 184, 207, 0.58); }
+.tiny-en { font-size: 6px; fill: rgba(110, 128, 150, 0.52); }
+
+.wave,
+.chart-line,
+.terrain path {
+  fill: none;
+  stroke: rgba(175, 194, 220, 0.35);
+  stroke-width: 1;
+}
+.wave.red,
+.terrain .red,
+.orbit .red,
+.venn .red {
+  stroke: rgba(240, 74, 59, 0.55);
+  filter: url(#redGlow);
+}
+
+.photo-person { fill: rgba(4, 6, 10, 0.82); stroke: rgba(160,180,205,0.12); }
+.photo-head { fill: rgba(10, 14, 20, 0.9); stroke: rgba(160,180,205,0.14); }
+.photo-light { fill: rgba(241, 177, 101, 0.55); filter: url(#softGlow); }
+.photo-lamp { fill: rgba(241, 177, 101, 0.78); filter: url(#softGlow); }
+
+.node-port {
+  fill: rgba(230, 238, 248, 0.82);
+  filter: url(#softGlow);
+}
+
+.icon-box {
+  fill: rgba(4, 10, 18, 0.48);
+  stroke: rgba(175, 194, 220, 0.18);
+}
+
+.icon-stroke,
+.mini-icon,
+.mini-icon-circle {
+  fill: none;
+  stroke: rgba(214, 226, 243, 0.58);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.lucide-icon {
+  fill: none;
+  stroke: rgba(214, 226, 243, 0.62);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lucide-icon.mini {
+  stroke: rgba(214, 226, 243, 0.55);
+  stroke-width: 1.55;
+}
+
+.node-title { font-size: 9px; fill: rgba(225, 233, 244, 0.76); }
+.node-en { font-size: 5.8px; fill: rgba(114, 130, 154, 0.56); }
+.node-detail { font-size: 6.2px; fill: rgba(145, 164, 188, 0.58); }
+
+.prism-lines polygon,
+.prism-lines line,
+.wireframe polygon,
+.wireframe line,
+.orbit ellipse,
+.network polygon,
+.network line,
+.venn circle {
+  fill: none;
+  stroke: rgba(175, 194, 220, 0.22);
+  stroke-width: 1;
+}
+
+.wireframe polygon:nth-child(2),
+.network .red-box {
+  stroke: rgba(240, 74, 59, 0.55);
+  filter: url(#redGlow);
+}
+
+.memory-card .panel,
+.exec-card .panel {
+  fill: rgba(3, 9, 15, 0.44);
+  stroke: rgba(175, 194, 220, 0.11);
+}
+
+.eval-en { font-size: 6px; fill: rgba(110, 128, 150, 0.52); }
+.score { font-size: 8px; fill: #f04a3b; filter: url(#redGlow); }
+.dim-score { fill: rgba(145, 164, 188, 0.5); filter: none; }
+
+.decision-core circle {
+  fill: none;
+  stroke: rgba(175, 194, 220, 0.18);
+}
+.decision-core .red-fill { fill: rgba(240, 74, 59, 0.1); stroke: rgba(240, 74, 59, 0.48); filter: url(#redGlow); }
+.score-value { font-size: 12px; fill: #f04a3b; text-anchor: middle; filter: url(#redGlow); }
+.check { fill: none; stroke: rgba(175, 194, 220, 0.22); }
+.check-on { fill: none; stroke: rgba(240, 74, 59, 0.58); filter: url(#redGlow); }
+
+.schedule line {
+  stroke: rgba(175, 194, 220, 0.12);
+}
+.bar { fill: rgba(175, 194, 220, 0.38); }
+.bar.red { fill: rgba(240, 74, 59, 0.68); filter: url(#redGlow); }
+.red-box { fill: none; stroke: rgba(240, 74, 59, 0.55); }
+
+
+.reference-underlay {
+  opacity: 0.28;
+}
+
+.editable-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.editable-chain.show-edit-layer .editable-overlay {
+  opacity: 1;
+}
+
+.editable-chain.show-edit-layer .reference-underlay {
+  opacity: 0.18;
+}
+
+.trace-panel,
+.trace-subpanel,
+.trace-device-card,
+.trace-bottom-panel {
+  fill: rgba(2, 8, 14, 0.12);
+  stroke: rgba(170, 190, 220, 0.065);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.trace-subpanel {
+  fill: rgba(2, 8, 14, 0.08);
+  stroke: rgba(170, 190, 220, 0.09);
+}
+
+.trace-device-card {
+  fill: rgba(2, 8, 14, 0.2);
+  stroke: rgba(170, 190, 220, 0.12);
+}
+
+.trace-bottom-panel {
+  fill: rgba(2, 8, 14, 0.12);
+  stroke: rgba(170, 190, 220, 0.075);
+}
+
+.dense-line-trace path {
+  fill: none;
+  stroke: rgba(160, 180, 205, 0.075);
+  stroke-width: 0.45;
+  vector-effect: non-scaling-stroke;
+}
+
+.diagram-detail-layer polygon,
+.diagram-detail-layer line,
+.diagram-detail-layer path {
+  fill: none;
+  stroke: rgba(180, 200, 225, 0.16);
+  stroke-width: 0.62;
+  vector-effect: non-scaling-stroke;
+}
+
+.diagram-detail-layer .red,
+.diagram-detail-layer .funnel-outline {
+  stroke: rgba(240, 74, 59, 0.38);
+  opacity: 0.48;
+  filter: none;
+}
+
+.diagram-detail-layer .funnel-fill {
+  fill: rgba(240, 74, 59, 0.06);
+  stroke: rgba(240, 74, 59, 0.28);
+  filter: none;
+}
+
+.memory-stack-3d polygon,
+.memory-stack-3d line,
+.cognition-planes-3d polygon,
+.cognition-planes-3d line {
+  fill: none;
+  stroke: rgba(185, 205, 230, 0.18);
+  stroke-width: 0.72;
+  vector-effect: non-scaling-stroke;
+}
+
+.memory-stack-3d .stack-plane line,
+.cognition-planes-3d .cog-plane line {
+  stroke: rgba(185, 205, 230, 0.105);
+  stroke-width: 0.55;
+}
+
+.memory-stack-3d .stack-connectors line {
+  stroke: rgba(185, 205, 230, 0.12);
+  stroke-dasharray: 3 5;
+}
+
+.memory-stack-3d .plane-1 { opacity: 0.38; }
+.memory-stack-3d .plane-2 { opacity: 0.48; }
+.memory-stack-3d .plane-3 { opacity: 0.58; }
+.memory-stack-3d .plane-4 { opacity: 0.7; }
+.memory-stack-3d .plane-5 { opacity: 0.82; }
+.memory-stack-3d .plane-6 { opacity: 0.96; }
+
+.memory-stack-3d .plane-3 polygon,
+.memory-stack-3d .plane-4 polygon {
+  stroke: rgba(240, 74, 59, 0.22);
+}
+
+.cognition-planes-3d .cog-plane {
+  opacity: 0.58;
+}
+
+.cognition-planes-3d .cog-plane.active polygon {
+  stroke: rgba(240, 74, 59, 0.26);
+}
+
+.tom-surface path {
+  opacity: 0.58;
+}
+
+#memory-prism {
+  display: none;
+}
+
+.wireframe {
+  display: none;
+}
+
+.ports-and-status-layer circle {
+  fill: rgba(230, 238, 248, 0.62);
+  filter: url(#softGlow);
+}
+
+.ports-and-status-layer .red-dot {
+  fill: #f04a3b;
+  filter: url(#redGlow);
+  opacity: 0.78;
+}
+
+.device-status-bars .meter {
+  stroke-width: 1.2;
+}
+
+.bottom-wave-detail .chart-line {
+  opacity: 0.32;
+}
+
+.bottom-wave-detail .chart-line.faint {
+  stroke: rgba(175, 194, 220, 0.18);
+  opacity: 0.36;
+}
+
+
+.trace-toolbar {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(170, 190, 220, 0.16);
+  border-radius: 999px;
+  background: rgba(2, 7, 12, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.trace-toolbar button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: rgba(180, 198, 220, 0.72);
+  background: transparent;
+  font: 11px/1 "PingFang SC", "Noto Sans SC", sans-serif;
+  cursor: pointer;
+}
+
+.trace-toolbar button.active {
+  color: rgba(245, 248, 252, 0.92);
+  background: rgba(240, 74, 59, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(240, 74, 59, 0.24);
+}
+
+.match-mode .reference-underlay {
+  opacity: 1;
+}
+
+.match-mode .editable-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.compare-mode .reference-underlay {
+  opacity: 0.9;
+}
+
+.compare-mode .editable-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.compare-mode .trace-v2 .v2-bg,
+.compare-mode .trace-v2 > rect[fill="url(#grid)"],
+.compare-mode .trace-v2 > rect[fill="url(#fineGrid)"],
+.compare-mode .trace-v2 .v2-ambient-blue,
+.compare-mode .trace-v2 .v2-ambient-red {
+  opacity: 0;
+}
+
+.compare-mode .trace-v2 {
+  mix-blend-mode: screen;
+}
+
+.compare-mode .trace-v2 path,
+.compare-mode .trace-v2 line,
+.compare-mode .trace-v2 rect,
+.compare-mode .trace-v2 circle,
+.compare-mode .trace-v2 ellipse,
+.compare-mode .trace-v2 polygon,
+.compare-mode .trace-v2 use {
+  opacity: 0;
+}
+
+.compare-mode .trace-v2 text {
+  opacity: 1;
+}
+
+.vector-mode .reference-underlay {
+  opacity: 0;
+}
+
+.vector-mode .editable-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#panel-trace-layer,
+#editable-global-lines,
+#diagram-detail-layer,
+#top-navigation,
+#user-input,
+#perception-layer,
+#memory-layer,
+#cognition-layer,
+#decision-layer,
+#dispatch-layer,
+#execution-layer,
+#ports-and-status-layer,
+#bottom-legend,
+#external-knowledge,
+#feedback-learning {
+  display: none;
+}
+
+.trace-v2 {
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.trace-v2 .v2-bg {
+  fill: #000;
+}
+
+.trace-v2 .v2-ambient-blue {
+  fill: rgba(28, 60, 86, 0.06);
+  filter: blur(28px);
+}
+
+.trace-v2 .v2-ambient-red {
+  fill: rgba(88, 26, 18, 0.05);
+  filter: blur(24px);
+}
+
+.trace-v2 text {
+  dominant-baseline: alphabetic;
+}
+
+.v2-title,
+.v2-cn,
+.v2-node-title,
+.v2-eval {
+  fill: rgba(218, 228, 240, 0.78);
+  font-size: 10px;
+  letter-spacing: 0.55px;
+}
+
+.v2-sub,
+.v2-en,
+.v2-node-en {
+  fill: rgba(105, 125, 148, 0.58);
+  font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+  font-size: 6px;
+  letter-spacing: 0.35px;
+}
+
+.v2-num,
+.v2-small,
+.v2-score {
+  font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+}
+
+.v2-num {
+  fill: rgba(165, 184, 208, 0.58);
+  font-size: 10px;
+}
+
+.v2-small {
+  fill: rgba(150, 168, 190, 0.6);
+  font-size: 7px;
+}
+
+.v2-quote {
+  fill: rgba(230, 238, 248, 0.82);
+  font-size: 8px;
+}
+
+.v2-top line,
+.v2-lines path,
+.v2-panel,
+.v2-icon-ring,
+.v2-icon-box,
+.v2-stack polygon,
+.v2-stack line,
+.v2-cube polygon,
+.v2-cube line,
+.v2-terrain path,
+.v2-terrain line,
+.v2-orbit ellipse,
+.v2-funnel path,
+.v2-gantt line,
+.v2-network polygon,
+.v2-network line,
+.v2-network circle,
+.v2-venn circle,
+.v2-meter,
+.v2-legend,
+.v2-legend-dash,
+.v2-cylinder,
+.v2-chart {
+  fill: none;
+  stroke: rgba(170, 190, 216, 0.17);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.v2-panel {
+  fill: rgba(0, 0, 0, 0.18);
+  stroke: rgba(170, 190, 216, 0.13);
+}
+
+.v2-icon,
+.v2-mini-icon {
+  fill: none;
+  stroke: rgba(210, 224, 240, 0.58);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.v2-mini-icon {
+  stroke-width: 1.35;
+}
+
+.v2-port,
+.v2-white {
+  fill: rgba(230, 238, 248, 0.82);
+  filter: url(#softGlow);
+}
+
+.v2-red {
+  fill: #f04a3b;
+  filter: url(#redGlow);
+  opacity: 0.88;
+}
+
+.v2-lines path {
+  stroke: rgba(165, 185, 210, 0.105);
+  stroke-width: 0.55;
+}
+
+.v2-lines .v2-feedback {
+  stroke-dasharray: 4 6;
+  opacity: 0.8;
+}
+
+.v2-wave,
+.v2-chart,
+.v2-lamp-line {
+  fill: none;
+  stroke: rgba(170, 190, 216, 0.26);
+  stroke-width: 0.85;
+}
+
+.v2-wave-red,
+.v2-chart-red,
+.v2-legend-red,
+.v2-meter-red,
+.red-bar {
+  fill: none;
+  stroke: rgba(240, 74, 59, 0.62);
+  stroke-width: 0.95;
+  filter: url(#redGlow);
+}
+
+.red-bar,
+.pale-bar {
+  stroke: none;
+  fill: rgba(240, 74, 59, 0.62);
+}
+
+.pale-bar {
+  fill: rgba(170, 190, 216, 0.34);
+}
+
+.v2-person {
+  fill: rgba(5, 8, 12, 0.88);
+  stroke: rgba(170, 190, 216, 0.1);
+}
+
+.v2-head {
+  fill: rgba(8, 12, 18, 0.94);
+  stroke: rgba(170, 190, 216, 0.13);
+}
+
+.v2-lamp {
+  fill: rgba(239, 169, 88, 0.62);
+  filter: url(#softGlow);
+}
+
+.v2-stack g,
+.v2-cube g {
+  opacity: 0.88;
+}
+
+.v2-stack polygon,
+.v2-cube polygon {
+  stroke: rgba(190, 210, 235, 0.28);
+}
+
+.v2-stack line,
+.v2-cube line {
+  stroke: rgba(190, 210, 235, 0.16);
+}
+
+.v2-stack .stack-spine line {
+  stroke: rgba(190, 210, 235, 0.11);
+  stroke-dasharray: 3 6;
+}
+
+.v2-stack .stack-plane.active .plane-face {
+  stroke: rgba(240, 74, 59, 0.42);
+  filter: url(#redGlow);
+}
+
+.v2-stack .stack-node {
+  fill: rgba(230, 238, 248, 0.72);
+  stroke: none;
+}
+
+.v2-memory-db .db-shell {
+  fill: rgba(0, 0, 0, 0.12);
+  stroke: rgba(170, 190, 216, 0.13);
+}
+
+.v2-memory-db .db-card polygon {
+  fill: rgba(170, 190, 216, 0.035);
+  stroke: rgba(170, 190, 216, 0.18);
+}
+
+.v2-memory-db .db-card rect {
+  fill: rgba(0, 0, 0, 0.22);
+  stroke: rgba(170, 190, 216, 0.14);
+}
+
+.v2-memory-db .db-card text {
+  fill: rgba(168, 186, 208, 0.66);
+  font-size: 7px;
+}
+
+.score-grid line {
+  stroke: rgba(170, 190, 216, 0.08);
+  stroke-width: 0.5;
+}
+
+.v2-terrain .red,
+.v2-orbit .red,
+.v2-venn .red,
+.v2-funnel .red-fill,
+.red-box {
+  stroke: rgba(240, 74, 59, 0.45);
+  filter: url(#redGlow);
+}
+
+.v2-funnel .red-fill {
+  fill: rgba(240, 74, 59, 0.06);
+}
+
+.v2-score {
+  fill: rgba(240, 74, 59, 0.9);
+  font-size: 7px;
+  filter: url(#redGlow);
+}
+
+.center {
+  text-anchor: middle;
+}
+
+.v2-mini-card rect {
+  fill: rgba(3, 9, 15, 0.36);
+  stroke: rgba(170, 190, 216, 0.12);
+}
+
+.v2-mini-card text {
+  fill: rgba(168, 186, 208, 0.62);
+  font-size: 7px;
+}
+
+.v2-red-ring,
+.v2-check {
+  fill: none;
+  stroke: rgba(240, 74, 59, 0.5);
+  filter: url(#redGlow);
+}
+
+.v2-check {
+  stroke: rgba(170, 190, 216, 0.18);
+  filter: none;
+}
+
+.v2-legend-dash {
+  stroke-dasharray: 4 5;
+}
+
+.v2-chart.faint {
+  stroke: rgba(170, 190, 216, 0.12);
+}
+
+.v2-art-overlays path,
+.v2-art-overlays line,
+.v2-art-overlays ellipse {
+  fill: none;
+  stroke: rgba(170, 190, 216, 0.105);
+  stroke-width: 0.46;
+  vector-effect: non-scaling-stroke;
+}
+
+.v2-art-overlays circle {
+  fill: rgba(210, 225, 240, 0.55);
+  filter: url(#softGlow);
+}
+
+.v2-art-overlays .hot {
+  fill: #f04a3b;
+  filter: url(#redGlow);
+}
+
+.v2-art-overlays .red {
+  stroke: rgba(240, 74, 59, 0.32);
+  filter: url(#redGlow);
+}
+
+.thread-bundle path {
+  stroke: rgba(170, 190, 216, 0.09);
+}
+
+.micro-grid line {
+  stroke: rgba(170, 190, 216, 0.055);
+  stroke-dasharray: 2 8;
+}
+
+.decision-radar ellipse {
+  stroke: rgba(170, 190, 216, 0.09);
+}
+
+.device-rails line {
+  stroke: rgba(240, 74, 59, 0.24);
+}
+
+.v2-module-visuals path,
+.v2-module-visuals line,
+.v2-module-visuals rect,
+.v2-module-visuals polygon,
+.v2-module-visuals ellipse,
+.v2-module-visuals circle {
+  fill: none;
+  stroke: rgba(178, 198, 224, 0.14);
+  stroke-width: 0.62;
+  vector-effect: non-scaling-stroke;
+}
+
+.v2-module-visuals rect {
+  fill: rgba(0, 0, 0, 0.16);
+  stroke: rgba(178, 198, 224, 0.105);
+}
+
+.v2-module-visuals .red,
+.v2-module-visuals .signal-thread.red,
+.v2-module-visuals .bar-red {
+  stroke: rgba(240, 74, 59, 0.5);
+  filter: url(#redGlow);
+}
+
+.v2-module-visuals .hot {
+  fill: #f04a3b;
+  stroke: none;
+  filter: url(#redGlow);
+}
+
+.v2-module-visuals circle {
+  fill: rgba(220, 234, 248, 0.62);
+  stroke: none;
+  filter: url(#softGlow);
+}
+
+.v2-module-visuals .bar {
+  fill: rgba(178, 198, 224, 0.28);
+  stroke: none;
+}
+
+.v2-module-visuals .bar-red {
+  fill: rgba(240, 74, 59, 0.58);
+  stroke: none;
+}
+
+.pre-memory-crystal polygon,
+.cognition-cube-detail polygon {
+  stroke: rgba(190, 210, 235, 0.24);
+}
+
+.pre-memory-crystal line,
+.cognition-cube-detail line {
+  stroke: rgba(190, 210, 235, 0.12);
+}
+
+.memory-db-3d ellipse,
+.memory-db-3d line {
+  stroke: rgba(190, 210, 235, 0.16);
+}
+
+.decision-funnel-detail path,
+.decision-radar path {
+  stroke-width: 0.7;
+}
+
+.execution-sparkline-detail path {
+  stroke-linecap: round;
+}
+
+.auto-vector-trace {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.auto-vector-trace path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.auto-vector-trace .auto-line {
+  stroke: rgba(178, 196, 220, 0.24);
+  stroke-width: 0.62;
+}
+
+.auto-vector-trace .auto-red {
+  stroke: rgba(240, 74, 59, 0.64);
+  stroke-width: 0.74;
+  filter: url(#redGlow);
+}
+
+.compare-mode .auto-vector-trace .auto-line {
+  stroke: rgba(220, 235, 250, 0.5);
+  stroke-width: 0.72;
+}
+
+.compare-mode .auto-vector-trace .auto-red {
+  stroke: rgba(255, 70, 50, 0.82);
+  stroke-width: 0.82;
+}
+
+.trace-v2 .v2-lines,
+.trace-v2 .v2-panel,
+.trace-v2 .v2-icon-ring,
+.trace-v2 .v2-icon-box,
+.trace-v2 .v2-stack,
+.trace-v2 .v2-cube,
+.trace-v2 .v2-terrain,
+.trace-v2 .v2-orbit,
+.trace-v2 .v2-funnel,
+.trace-v2 .v2-gantt,
+.trace-v2 .v2-network,
+.trace-v2 .v2-venn,
+.trace-v2 .v2-device rect,
+.trace-v2 .v2-bottom path,
+.trace-v2 .v2-bottom ellipse,
+.trace-v2 .v2-bottom line {
+  opacity: 0.16;
+}
